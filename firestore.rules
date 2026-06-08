@@ -1,0 +1,46 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Check if user is one of the 3 configured admin emails
+    function isAdmin() {
+      return request.auth != null && 
+        (request.auth.token.email == "arvind152402@gmail.com" || 
+         request.auth.token.email == "admin2@example.com" || 
+         request.auth.token.email == "admin3@example.com");
+    }
+
+    // Public read access for events, performances, gallery, vision docs
+    match /events/{event} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /performances/{perf} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /gallery/{item} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /vision/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Bookings can be written by anyone (public booking form), read/deleted only by admin
+    match /bookings/{booking} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Chats: user can read/write their own chat logs. Admin can read/write everything.
+    match /chats/{chat} {
+      allow read, write: if isAdmin() || (request.auth != null && request.auth.uid == chat);
+      
+      // Allow read/write to subcollection messages
+      match /messages/{message} {
+        allow read, write: if isAdmin() || (request.auth != null && request.auth.uid == chat);
+      }
+    }
+  }
+}

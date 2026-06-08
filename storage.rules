@@ -1,0 +1,17 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isAdmin() {
+      return request.auth != null && 
+        (request.auth.token.email == "arvind152402@gmail.com" || 
+         request.auth.token.email == "admin2@example.com" || 
+         request.auth.token.email == "admin3@example.com");
+    }
+
+    // Only admin can upload/delete images or media. Public can read.
+    match /{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}
