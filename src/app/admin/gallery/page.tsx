@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { db, storage } from '@/lib/firebase';
+import { db } from '@/lib/firebase';
+import { supabase } from '@/lib/supabase';
 import { collection, onSnapshot, query, orderBy, addDoc, deleteDoc, doc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { ImageIcon, Plus, Trash2, X, Play, Upload } from 'lucide-react';
 
 interface GalleryItem {
@@ -67,15 +67,11 @@ export default function AdminGalleryPage() {
   const handleDelete = async (item: GalleryItem) => {
     if (!confirm('Are you sure you want to delete this gallery item?')) return;
     try {
-      // 1. Delete from Firebase Storage if it's an uploaded image
-      if (item.type === 'image' && item.imageUrl.includes('firebasestorage.googleapis.com')) {
-        // Extract storage path from url to delete it
-        const decodedUrl = decodeURIComponent(item.imageUrl);
-        const pathStartIndex = decodedUrl.indexOf('/o/') + 3;
-        const pathEndIndex = decodedUrl.indexOf('?alt=media');
-        const storagePath = decodedUrl.substring(pathStartIndex, pathEndIndex);
-        const fileRef = ref(storage, storagePath);
-        await deleteObject(fileRef).catch((err) => console.warn("Could not delete from storage:", err));
+      // 1. Delete from Supabase Storage if it's an uploaded image
+      if (item.type === 'image' && item.imageUrl.includes('supabase.co')) {
+        const parts = item.imageUrl.split('/gallery/');
+        const fileName = parts[parts.length - 1];
+        await supabase.storage.from('gallery').remove([fileName]).catch((err) => console.warn(err));
       }
 
       // 2. Delete Firestore doc
@@ -95,10 +91,21 @@ export default function AdminGalleryPage() {
 
       if (form.type === 'image') {
         if (uploadFile) {
-          // Upload actual file to Firebase Storage
-          const storageRef = ref(storage, `gallery/${Date.now()}_${uploadFile.name}`);
-          const uploadResult = await uploadBytes(storageRef, uploadFile);
-          finalImageUrl = await getDownloadURL(uploadResult.ref);
+          // Upload actual file to Supabase Storage
+          const fileName = `${Date.now()}_${uploadFile.name}`;
+          const { error: uploadError } = await supabase.storage
+            .from('gallery')
+            .upload(fileName, uploadFile, {
+              cacheControl: '3600',
+              upsert: false
+            });
+          if (uploadError) throw uploadError;
+
+          // Retrieve public url
+          const { data: { publicUrl } } = supabase.storage
+            .from('gallery')
+            .getPublicUrl(fileName);
+          finalImageUrl = publicUrl;
         } else if (!finalImageUrl) {
           alert('Please upload an image file or input a valid Image URL.');
           setSubmitting(false);
