@@ -20,6 +20,8 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
+  const isAdminRoute = pathname.startsWith('/admin') || pathname === '/admin-login';
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -32,6 +34,8 @@ export default function Navbar() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  if (isAdminRoute) return null;
 
   // Close mobile menu when page changes
   useEffect(() => {

@@ -16,45 +16,7 @@ interface GalleryItem {
   createdAt: number;
 }
 
-const defaultGallery: GalleryItem[] = [
-  {
-    id: 'gal-1',
-    type: 'image',
-    title: 'Grand Symphony Performance',
-    imageUrl: 'https://images.pexels.com/photos/1916824/pexels-photo-1916824.jpeg?auto=compress&cs=tinysrgb&w=800',
-    createdAt: 1,
-  },
-  {
-    id: 'gal-2',
-    type: 'youtube',
-    title: 'Raga Bhairavi Violin Solo Curation',
-    imageUrl: 'https://images.pexels.com/photos/167636/pexels-photo-167636.jpeg?auto=compress&cs=tinysrgb&w=800',
-    youtubeUrl: 'https://www.youtube.com',
-    createdAt: 2,
-  },
-  {
-    id: 'gal-3',
-    type: 'image',
-    title: 'Acoustic Raga Curation Sessions',
-    imageUrl: 'https://images.pexels.com/photos/164743/pexels-photo-164743.jpeg?auto=compress&cs=tinysrgb&w=800',
-    createdAt: 3,
-  },
-  {
-    id: 'gal-4',
-    type: 'image',
-    title: 'Vocal Performance & Raga Curation',
-    imageUrl: 'https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=800',
-    createdAt: 4,
-  },
-  {
-    id: 'gal-5',
-    type: 'youtube',
-    title: 'Classical Heritage Orchestration Tour',
-    imageUrl: 'https://images.pexels.com/photos/164938/pexels-photo-164938.jpeg?auto=compress&cs=tinysrgb&w=800',
-    youtubeUrl: 'https://www.youtube.com',
-    createdAt: 5,
-  },
-];
+const defaultGallery: GalleryItem[] = [];
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
@@ -123,63 +85,71 @@ export default function GalleryPage() {
             Loading media items...
           </div>
         ) : (
-          <div className="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6 max-w-6xl mx-auto">
-            {items.map((item) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, margin: '-50px' }}
-                transition={{ duration: 0.5 }}
-                className="break-inside-avoid glass-panel p-3 rounded-2xl flex flex-col space-y-3 shadow-sm hover:shadow-md transition-shadow relative group cursor-pointer"
-              >
-                {/* Media frame */}
-                <div className="relative rounded-xl overflow-hidden aspect-[4/3] sm:aspect-auto shadow-sm">
-                  {/* Next Image Optimized Lazy Loading */}
-                  <div className="relative w-full h-auto overflow-hidden rounded-lg">
-                    <Image
-                      src={item.imageUrl}
-                      alt={item.title}
-                      width={450}
-                      height={350}
-                      className="w-full h-auto object-cover rounded-lg transition-transform duration-700 group-hover:scale-105"
-                      sizes="(max-w-768px) 100vw, (max-w-1200px) 50vw, 33vw"
-                    />
-                  </div>
+          <div className="max-w-6xl mx-auto">
+            {items.length === 0 ? (
+              <div className="glass-panel p-16 rounded-3xl text-center text-text-secondary text-sm border border-primary/5">
+                No gallery items uploaded yet. Please check back later.
+              </div>
+            ) : (
+              <div className="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6">
+                {items.map((item) => (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true, margin: '-50px' }}
+                    transition={{ duration: 0.5 }}
+                    className="break-inside-avoid glass-panel p-3 rounded-2xl flex flex-col space-y-3 shadow-sm hover:shadow-md transition-shadow relative group cursor-pointer"
+                  >
+                    {/* Media frame */}
+                    <div className="relative rounded-xl overflow-hidden aspect-[4/3] sm:aspect-auto shadow-sm">
+                      {/* Next Image Optimized Lazy Loading */}
+                      <div className="relative w-full h-auto overflow-hidden rounded-lg">
+                        <Image
+                          src={item.imageUrl}
+                          alt={item.title}
+                          width={450}
+                          height={350}
+                          className="w-full h-auto object-cover rounded-lg transition-transform duration-700 group-hover:scale-105"
+                          sizes="(max-w-768px) 100vw, (max-w-1200px) 50vw, 33vw"
+                        />
+                      </div>
 
-                  {/* Hover visual details */}
-                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-4">
-                    {item.type === 'image' ? (
-                      <button
-                        onClick={() => setLightboxImage(item.imageUrl)}
-                        className="w-12 h-12 rounded-full bg-white/90 hover:bg-white text-primary-deep flex items-center justify-center shadow-lg transition-colors"
-                      >
-                        <Eye className="w-5 h-5" />
-                      </button>
-                    ) : (
-                      <a
-                        href={item.youtubeUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center shadow-lg transition-colors hover:bg-primary-hover"
-                      >
-                        <Play className="w-5 h-5 fill-white ml-0.5" />
-                      </a>
-                    )}
-                  </div>
-                </div>
+                      {/* Hover visual details */}
+                      <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-4">
+                        {item.type === 'image' ? (
+                          <button
+                            onClick={() => setLightboxImage(item.imageUrl)}
+                            className="w-12 h-12 rounded-full bg-white/90 hover:bg-white text-primary-deep flex items-center justify-center shadow-lg transition-colors"
+                          >
+                            <Eye className="w-5 h-5" />
+                          </button>
+                        ) : (
+                          <a
+                            href={item.youtubeUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center shadow-lg transition-colors hover:bg-primary-hover"
+                          >
+                            <Play className="w-5 h-5 fill-white ml-0.5" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
 
-                {/* Info Text */}
-                <div className="px-2 pb-1 flex items-center justify-between">
-                  <span className="text-xs font-serif font-bold text-foreground truncate max-w-[80%]">
-                    {item.title}
-                  </span>
-                  <span className="text-[9px] uppercase tracking-wider text-text-light flex-shrink-0">
-                    {item.type}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
+                    {/* Info Text */}
+                    <div className="px-2 pb-1 flex items-center justify-between">
+                      <span className="text-xs font-serif font-bold text-foreground truncate max-w-[80%]">
+                        {item.title}
+                      </span>
+                      <span className="text-[9px] uppercase tracking-wider text-text-light flex-shrink-0">
+                        {item.type}
+                      </span>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

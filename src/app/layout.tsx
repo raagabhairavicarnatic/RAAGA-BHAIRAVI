@@ -3,7 +3,7 @@ import { Playfair_Display, Poppins } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
-import ChatSystem from '@/components/chat-system';
+import WhatsAppFloat from '@/components/whatsapp-float';
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -56,8 +56,8 @@ export default function RootLayout({
         {/* Main page content area */}
         <main className="flex-1 w-full">{children}</main>
 
-        {/* Floating Chat Assistant */}
-        <ChatSystem />
+        {/* Floating WhatsApp Button */}
+        <WhatsAppFloat />
 
         {/* Footer */}
         <Footer />

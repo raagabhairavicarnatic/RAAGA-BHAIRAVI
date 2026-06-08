@@ -1,5 +1,8 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Music, ArrowRight } from 'lucide-react';
 
 const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -54,7 +57,12 @@ const YoutubeIcon = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 export default function Footer() {
+  const pathname = usePathname();
   const currentYear = new Date().getFullYear();
+
+  const isAdminRoute = pathname.startsWith('/admin') || pathname === '/admin-login';
+
+  if (isAdminRoute) return null;
 
   return (
     <footer className="bg-white border-t border-primary/5 py-16 px-6">
