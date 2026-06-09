@@ -48,7 +48,7 @@ export default function Home() {
           variants={staggerContainer}
           initial="initial"
           animate="animate"
-          className="relative z-20 text-center max-w-4xl px-6 flex flex-col items-center justify-center space-y-6 mt-16 pb-24"        >
+          className="relative z-20 text-center max-w-4xl px-6 flex flex-col items-center justify-center space-y-6 mt-32"        >
           {/* Actual Logo */}
           <motion.div
             variants={fadeInUp}
