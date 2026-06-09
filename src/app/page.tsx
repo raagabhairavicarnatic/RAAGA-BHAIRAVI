@@ -50,22 +50,8 @@ export default function Home() {
           animate="animate"
           className="relative z-20 text-center max-w-4xl px-6 flex flex-col items-center justify-center space-y-5 mt-28"
         >
-          {/* Actual Logo */}
-          <motion.div
-            variants={fadeInUp}
-            className="relative w-44 h-44 sm:w-56 sm:h-56 rounded-full overflow-hidden border-4 border-white/60 shadow-2xl mb-4 ring-4 ring-primary/20 backdrop-blur-sm"
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.4 }}
-          >
-            <Image
-              src="/logo.jpeg"
-              alt="Raaga Bhairavi Logo"
-              fill
-              className="object-cover"
-              sizes="224px"
-              priority
-            />
-          </motion.div>
+          {/* Spacer to preserve space where the logo was */}
+          <div className="w-44 h-44 sm:w-56 sm:h-56 mb-4 pointer-events-none" />
 
           {/* Group Title */}
           <motion.h1

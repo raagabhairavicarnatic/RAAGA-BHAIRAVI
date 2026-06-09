@@ -4,6 +4,7 @@ import './globals.css';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
 import WhatsAppFloat from '@/components/whatsapp-float';
+import LoadingScreen from '@/components/loading-screen';
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -50,6 +51,9 @@ export default function RootLayout({
       className={`${playfair.variable} ${poppins.variable} h-full scroll-smooth antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans selection:bg-primary/20 selection:text-primary-deep">
+        {/* Animated 5s Loading Splash Screen */}
+        <LoadingScreen />
+
         {/* Transparent Header/Navbar */}
         <Navbar />
 
