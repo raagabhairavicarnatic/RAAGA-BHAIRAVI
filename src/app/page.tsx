@@ -24,31 +24,31 @@ export default function Home() {
   return (
     <div className="bg-background relative w-full overflow-hidden">
       {/* 1. Fullscreen Cinematic Hero Section */}
-      <section className="relative w-full h-screen flex flex-col justify-center items-center overflow-hidden">
+      <section className="relative w-full h-screen flex flex-col justify-end items-center overflow-hidden">
         {/* Background Cinematic Image */}
         <Image
           src="/homeback.png"
           alt="RAAGA BHAIRAVI Cinematic Background"
           fill
-          className="absolute top-0 left-0 w-full h-full object-cover z-0 scale-105"
+          className="absolute top-0 left-0 w-full h-full object-cover object-[center_top] z-0"
           sizes="100vw"
           priority
           quality={90}
         />
 
-        {/* White / Soft Red Cinematic Overlay for Premium Light Aesthetics */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-white/70 to-[#FFF9F9] z-10" />
+        {/* Cinematic overlay: transparent at top (faces visible), dense at bottom (text readable) */}
+        <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-white/40 to-[#FFF9F9]/95 z-10" />
 
         {/* Floating subtle light/glow particles */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full filter blur-[100px] animate-pulse z-10" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary-secondary/5 rounded-full filter blur-[100px] animate-pulse z-10" />
 
-        {/* Hero Content */}
+        {/* Hero Content — sits at bottom so faces are unobstructed above */}
         <motion.div
           variants={staggerContainer}
           initial="initial"
           animate="animate"
-          className="relative z-20 text-center max-w-4xl px-6 flex flex-col items-center justify-center space-y-6 mt-16"
+          className="relative z-20 text-center w-full max-w-4xl px-6 flex flex-col items-center justify-end space-y-4 pb-20"
         >
           {/* Actual Logo */}
           <motion.div
