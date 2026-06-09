@@ -2,8 +2,9 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Music, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
@@ -69,9 +70,15 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
         {/* Brand Section */}
         <div className="md:col-span-2 space-y-6">
-          <Link href="/" className="flex items-center space-x-2 group">
-            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white">
-              <Music className="w-5 h-5" />
+          <Link href="/" className="flex items-center space-x-3 group">
+            <div className="relative w-14 h-14 rounded-full overflow-hidden border-2 border-primary/20 shadow-md flex-shrink-0">
+              <Image
+                src="/logo.jpeg"
+                alt="Raaga Bhairavi Logo"
+                fill
+                className="object-cover"
+                sizes="56px"
+              />
             </div>
             <div>
               <span className="font-serif font-bold text-xl tracking-wide text-foreground">
