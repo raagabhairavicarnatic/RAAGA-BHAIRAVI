@@ -25,15 +25,15 @@ export default function Home() {
     <div className="bg-background relative w-full overflow-hidden">
       {/* 1. Fullscreen Cinematic Hero Section */}
       <section className="relative w-full h-screen flex flex-col justify-center items-center overflow-hidden">
-        {/* Background Cinematic Video */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute top-0 left-0 w-full h-full object-cover z-0"
-          src="https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c025f73ab7885e369bebadb55c2ee702&profile_id=139&oauth2_token_id=57447761"
-          poster="https://images.pexels.com/photos/164743/pexels-photo-164743.jpeg?auto=compress&cs=tinysrgb&w=1920"
+        {/* Background Cinematic Image */}
+        <Image
+          src="/homeback.png"
+          alt="RAAGA BHAIRAVI Cinematic Background"
+          fill
+          className="absolute top-0 left-0 w-full h-full object-cover z-0 scale-105"
+          sizes="100vw"
+          priority
+          quality={90}
         />
 
         {/* White / Soft Red Cinematic Overlay for Premium Light Aesthetics */}
