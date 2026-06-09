@@ -25,6 +25,7 @@
 
   --font-serif: var(--font-playfair);
   --font-sans: var(--font-poppins);
+  --font-cinzel: var(--font-cinzel);
 }
 
 body {

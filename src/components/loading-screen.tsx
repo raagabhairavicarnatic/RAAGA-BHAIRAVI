@@ -67,7 +67,7 @@ export default function LoadingScreen() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative w-32 h-32 rounded-full overflow-hidden border-2 border-primary/20 shadow-xl mb-6 bg-white"
+              className="relative w-48 h-48 sm:w-64 sm:h-64 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl mb-8 bg-white"
             >
               <Image
                 src="/logo.jpeg"
@@ -75,26 +75,26 @@ export default function LoadingScreen() {
                 fill
                 className="object-cover"
                 priority
-                sizes="128px"
+                sizes="256px"
               />
             </motion.div>
 
-            {/* Subtitle as RAAGABHAIRAVI */}
+            {/* Title as RAAGABHAIRAVI in mystical/elegant font */}
             <motion.h1
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="font-serif text-3xl sm:text-4xl font-bold tracking-[0.25em] text-[#111111] uppercase mb-2"
+              className="font-cinzel text-4xl sm:text-6xl lg:text-7xl font-bold tracking-[0.3em] text-[#111111] uppercase mb-3"
             >
               RAAGABHAIRAVI
             </motion.h1>
 
-            {/* Echos of Divinity */}
+            {/* Subtitle in elegant italic serif font */}
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="text-primary text-xs sm:text-sm font-medium tracking-[0.3em] uppercase italic mb-8"
+              className="font-serif italic text-sm sm:text-lg tracking-[0.2em] text-primary/95 mt-1 mb-10"
             >
               Echos of Divinity
             </motion.p>
