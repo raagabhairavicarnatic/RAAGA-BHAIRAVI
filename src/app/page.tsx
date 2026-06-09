@@ -57,7 +57,7 @@ export default function Home() {
           <motion.h1
             variants={fadeInUp}
             className="font-serif text-5xl sm:text-7xl font-bold tracking-tight"
-            style={{ color: '#730001' }}
+            style={{ color: '#c60001' }}
           >
             RAAGA BHAIRAVI
           </motion.h1>
