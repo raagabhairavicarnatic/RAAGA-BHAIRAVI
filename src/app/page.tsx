@@ -56,9 +56,10 @@ export default function Home() {
           {/* Group Title */}
           <motion.h1
             variants={fadeInUp}
-            className="font-serif text-5xl sm:text-7xl font-bold tracking-tight text-foreground"
+            className="font-serif text-5xl sm:text-7xl font-bold tracking-tight"
+            style={{ color: '#730001' }}
           >
-            RAAGA <span className="text-primary">BHAIRAVI</span>
+            RAAGA BHAIRAVI
           </motion.h1>
 
           {/* Subtitle / Tagline */}
