@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Music, Calendar, ArrowRight, Play, Compass, Award } from 'lucide-react';
+import { Calendar, ArrowRight, Play, Compass, Award } from 'lucide-react';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
@@ -50,12 +50,21 @@ export default function Home() {
           animate="animate"
           className="relative z-20 text-center max-w-4xl px-6 flex flex-col items-center justify-center space-y-6 mt-16"
         >
-          {/* Logo element */}
+          {/* Actual Logo */}
           <motion.div
             variants={fadeInUp}
-            className="w-16 h-16 rounded-full border border-primary/20 bg-white/40 backdrop-blur-md flex items-center justify-center text-primary shadow-sm mb-2"
+            className="relative w-44 h-44 sm:w-56 sm:h-56 rounded-full overflow-hidden border-4 border-white/60 shadow-2xl mb-4 ring-4 ring-primary/20 backdrop-blur-sm"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.4 }}
           >
-            <Music className="w-8 h-8" />
+            <Image
+              src="/logo.jpeg"
+              alt="Raaga Bhairavi Logo"
+              fill
+              className="object-cover"
+              sizes="224px"
+              priority
+            />
           </motion.div>
 
           {/* Group Title */}

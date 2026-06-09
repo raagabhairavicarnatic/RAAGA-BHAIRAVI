@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Music } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const navLinks = [
@@ -53,9 +54,16 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           {/* Logo & Brand */}
-          <Link href="/" className="flex items-center space-x-2 group">
-            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white transition-transform duration-500 group-hover:rotate-12">
-              <Music className="w-5 h-5" />
+          <Link href="/" className="flex items-center space-x-3 group">
+            <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-primary/20 shadow-md transition-transform duration-500 group-hover:scale-110 group-hover:border-primary/50 flex-shrink-0">
+              <Image
+                src="/logo.jpeg"
+                alt="Raaga Bhairavi Logo"
+                fill
+                className="object-cover"
+                sizes="48px"
+                priority
+              />
             </div>
             <div>
               <span className="font-serif font-bold text-xl tracking-wide text-foreground group-hover:text-primary transition-colors">
