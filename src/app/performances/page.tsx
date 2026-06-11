@@ -26,6 +26,17 @@ const fadeInUp = {
   transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
 };
 
+const renderBoldText = (text: string) => {
+  if (!text) return '';
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <span key={index} className="font-normal text-foreground">{part.slice(2, -2)}</span>;
+    }
+    return part;
+  });
+};
+
 export default function PerformancesPage() {
   const [performances, setPerformances] = useState<PerformanceItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -159,8 +170,8 @@ export default function PerformancesPage() {
                         </h2>
                       </div>
 
-                      <p className="text-text-secondary text-sm sm:text-base leading-relaxed font-light">
-                        {perf.description}
+                      <p className="text-text-secondary text-sm sm:text-base leading-relaxed font-light text-justify">
+                        {renderBoldText(perf.description)}
                       </p>
 
                       {perf.videoUrl && (

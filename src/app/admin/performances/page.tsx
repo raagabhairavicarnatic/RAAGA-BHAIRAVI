@@ -23,6 +23,8 @@ export default function AdminPerformancesPage() {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingPerf, setEditingPerf] = useState<PerformanceItem | null>(null);
+  const [galleryImages, setGalleryImages] = useState<any[]>([]);
+  const [showGallerySelector, setShowGallerySelector] = useState(false);
 
   // Form states
   const [form, setForm] = useState({
@@ -59,6 +61,45 @@ export default function AdminPerformancesPage() {
 
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    const q = query(collection(db, 'gallery'), orderBy('createdAt', 'desc'));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const imgs: any[] = [];
+      snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        if (data.type === 'image') {
+          imgs.push({ id: docSnap.id, ...data });
+        }
+      });
+      setGalleryImages(imgs);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+      e.preventDefault();
+      const textarea = e.currentTarget;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const value = textarea.value;
+      const selectedText = value.substring(start, end);
+      const before = value.substring(0, start);
+      const after = value.substring(end);
+      const newText = `${before}**${selectedText}**${after}`;
+      
+      setForm((prev) => ({
+        ...prev,
+        [textarea.name]: newText,
+      }));
+
+      setTimeout(() => {
+        textarea.focus();
+        textarea.setSelectionRange(start + 2, end + 2);
+      }, 0);
+    }
+  };
 
   const handleTogglePin = async (id: string, currentlyPinned: boolean) => {
     const pinnedCount = performances.filter(p => p.pinned === true).length;
@@ -324,18 +365,33 @@ export default function AdminPerformancesPage() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Image URL */}
-                <div className="space-y-1">
-                  <label className="text-[10px] uppercase font-bold text-text-secondary">Showcase Image URL</label>
-                  <input
-                    type="url"
-                    name="imageUrl"
-                    required
-                    value={form.imageUrl}
-                    onChange={handleChange}
-                    className="w-full bg-white border border-primary/10 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-primary text-foreground"
-                    placeholder="e.g. https://images.pexels.com/...jpg"
-                  />
+                {/* Showcase Image selection from Gallery */}
+                <div className="space-y-1.5 flex flex-col justify-end">
+                  <label className="text-[10px] uppercase font-bold text-text-secondary block">Showcase Image</label>
+                  {form.imageUrl ? (
+                    <div className="flex items-center justify-between bg-white border border-primary/10 rounded-xl p-1.5 w-full">
+                      <div className="flex items-center space-x-3 overflow-hidden">
+                        <img src={form.imageUrl} alt="Preview" className="w-8 h-8 object-cover rounded-lg flex-shrink-0" />
+                        <span className="text-[10px] text-text-secondary truncate max-w-[120px]">Image Selected</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setShowGallerySelector(true)}
+                        className="text-[10px] uppercase font-bold text-primary hover:text-primary-hover tracking-wider cursor-pointer flex-shrink-0"
+                      >
+                        Change
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setShowGallerySelector(true)}
+                      className="w-full bg-white border border-primary/10 hover:border-primary rounded-xl py-2.5 text-xs text-text-secondary hover:text-primary font-semibold transition-colors cursor-pointer"
+                    >
+                      Select from Gallery
+                    </button>
+                  )}
+                  <input type="hidden" name="imageUrl" required value={form.imageUrl} />
                 </div>
 
                 {/* Video URL */}
@@ -361,8 +417,9 @@ export default function AdminPerformancesPage() {
                   rows={3}
                   value={form.description}
                   onChange={handleChange}
+                  onKeyDown={handleKeyDown}
                   className="w-full bg-white border border-primary/10 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-primary text-foreground resize-none"
-                  placeholder="Describe the set composition and highlights..."
+                  placeholder="Describe the set composition and highlights... (Use **text** for minimal bold)"
                 />
               </div>
 
@@ -374,6 +431,48 @@ export default function AdminPerformancesPage() {
                 {editingPerf ? 'Save Changes' : 'Publish Record'}
               </button>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Gallery Selector Modal */}
+      {showGallerySelector && (
+        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-2xl bg-white rounded-3xl p-6 shadow-2xl relative flex flex-col max-h-[80vh]">
+            <button
+              onClick={() => setShowGallerySelector(false)}
+              className="absolute top-5 right-5 text-text-secondary hover:text-primary transition-colors cursor-pointer"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <h3 className="font-serif text-xl font-bold text-foreground mb-4">Select Gallery Image</h3>
+            <div className="w-12 h-[1px] bg-primary/25 mb-4" />
+            
+            {galleryImages.length === 0 ? (
+              <div className="text-center py-12 text-xs text-text-secondary">
+                No images found in your gallery. Please upload photos in the Gallery section first.
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 overflow-y-auto pr-2 flex-1 min-h-0">
+                {galleryImages.map((img) => (
+                  <div
+                    key={img.id}
+                    onClick={() => {
+                      setForm((prev) => ({ ...prev, imageUrl: img.imageUrl }));
+                      setShowGallerySelector(false);
+                    }}
+                    className={`cursor-pointer border-2 rounded-2xl overflow-hidden aspect-square relative hover:border-primary transition-colors ${
+                      form.imageUrl === img.imageUrl ? 'border-primary' : 'border-slate-100'
+                    }`}
+                  >
+                    <img src={img.imageUrl} alt={img.title} className="w-full h-full object-cover" />
+                    <div className="absolute inset-x-0 bottom-0 bg-black/60 p-1.5 text-[9px] text-white truncate text-center font-medium">
+                      {img.title}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}

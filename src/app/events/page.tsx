@@ -26,6 +26,17 @@ const fadeInUp = {
   transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
 };
 
+const renderBoldText = (text: string) => {
+  if (!text) return '';
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <span key={index} className="font-normal text-foreground">{part.slice(2, -2)}</span>;
+    }
+    return part;
+  });
+};
+
 export default function EventsPage() {
   const [events, setEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -137,8 +148,8 @@ export default function EventsPage() {
                         <span>{event.venue}, {event.place}</span>
                       </div>
                     </div>
-                    <p className="text-xs sm:text-sm text-text-secondary leading-relaxed font-light">
-                      {event.description}
+                    <p className="text-xs sm:text-sm text-text-secondary leading-relaxed font-light text-justify">
+                      {renderBoldText(event.description)}
                     </p>
                   </div>
                 </motion.div>

@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Calendar, ArrowRight, Play, Compass, Award, MapPin } from 'lucide-react';
 import { db } from '@/lib/firebase';
-import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
+import { collection, query, orderBy, limit, getDocs, where } from 'firebase/firestore';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
@@ -22,6 +22,17 @@ const staggerContainer = {
   },
 };
 
+const renderBoldText = (text: string) => {
+  if (!text) return '';
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <span key={index} className="font-normal text-foreground">{part.slice(2, -2)}</span>;
+    }
+    return part;
+  });
+};
+
 export default function Home() {
   const [latestEvent, setLatestEvent] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -31,12 +42,27 @@ export default function Home() {
   useEffect(() => {
     const fetchLatestEvent = async () => {
       try {
-        const eventsQuery = query(
+        const todayStr = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        
+        // Find closest upcoming event
+        const upcomingQuery = query(
           collection(db, 'events'),
-          orderBy('date', 'desc'),
+          where('date', '>=', todayStr),
+          orderBy('date', 'asc'),
           limit(1)
         );
-        const querySnapshot = await getDocs(eventsQuery);
+        let querySnapshot = await getDocs(upcomingQuery);
+        
+        if (querySnapshot.empty) {
+          // Fallback to the latest past event
+          const pastQuery = query(
+            collection(db, 'events'),
+            orderBy('date', 'desc'),
+            limit(1)
+          );
+          querySnapshot = await getDocs(pastQuery);
+        }
+
         if (!querySnapshot.empty) {
           const doc = querySnapshot.docs[0];
           const data = doc.data();
@@ -197,7 +223,7 @@ export default function Home() {
             Transcending Musical Boundaries Through Pure Artistry
           </h2>
           <p className="text-text-secondary text-sm sm:text-base leading-relaxed text-justify">
-            Formed In The Heart Of Carnatic Heritage, RAAGA BHAIRAVI Blends Classical Raga Hierarchies , Orchestral Harmonies, And Experimental Sounds.We Have Had The Privilege Of Performing At Various Concerts In Mutt, Stages, And Temples, Sharing The Beauty Of Carnatic Music With Diverse Audiences.Our Team Comprises Six Enthusiastic Students, United By A Common Love For Music.Together, We Strive To Deliver Soulful And Memorable Performances That Reflect Both Tradition And Creativity
+            {renderBoldText("Formed In The Heart Of Carnatic Heritage, RAAGA BHAIRAVI Blends Classical Raga Hierarchies , Orchestral Harmonies, And Experimental Sounds.We Have Had The Privilege Of Performing At Various Concerts In Mutt, Stages, And Temples, Sharing The Beauty Of Carnatic Music With Diverse Audiences.Our Team Comprises Six Enthusiastic Students, United By A Common Love For Music.Together, We Strive To Deliver Soulful And Memorable Performances That Reflect Both Tradition And Creativity")}
           </p>
           <div className="pt-2">
             <Link
@@ -274,8 +300,8 @@ export default function Home() {
                   </div>
                   <div className="space-y-2">
                     <h3 className="font-serif font-bold text-lg text-foreground">{perf.title}</h3>
-                    <p className="text-xs text-text-secondary leading-relaxed line-clamp-2 font-light">
-                      {perf.description}
+                    <p className="text-xs text-text-secondary leading-relaxed line-clamp-2 font-light text-justify">
+                      {renderBoldText(perf.description)}
                     </p>
                   </div>
                 </motion.div>
@@ -346,8 +372,8 @@ export default function Home() {
                   <span>{latestEvent.venue}, {latestEvent.place}</span>
                 </div>
               </div>
-              <p className="text-xs sm:text-sm text-text-secondary leading-relaxed max-w-2xl font-light">
-                {latestEvent.description}
+              <p className="text-xs sm:text-sm text-text-secondary leading-relaxed max-w-2xl font-light text-justify">
+                {renderBoldText(latestEvent.description)}
               </p>
             </div>
           </div>

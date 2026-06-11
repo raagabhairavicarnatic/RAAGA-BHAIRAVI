@@ -121,6 +121,30 @@ export default function AdminEventsPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+      e.preventDefault();
+      const textarea = e.currentTarget;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const value = textarea.value;
+      const selectedText = value.substring(start, end);
+      const before = value.substring(0, start);
+      const after = value.substring(end);
+      const newText = `${before}**${selectedText}**${after}`;
+      
+      setForm((prev) => ({
+        ...prev,
+        [textarea.name]: newText,
+      }));
+
+      setTimeout(() => {
+        textarea.focus();
+        textarea.setSelectionRange(start + 2, end + 2);
+      }, 0);
+    }
+  };
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -292,6 +316,7 @@ export default function AdminEventsPage() {
                   rows={3}
                   value={form.description}
                   onChange={handleChange}
+                  onKeyDown={handleKeyDown}
                   className="w-full bg-white border border-primary/10 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-primary text-foreground resize-none"
                   placeholder="Describe the concert set details..."
                 />
