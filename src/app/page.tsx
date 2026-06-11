@@ -1,10 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Calendar, ArrowRight, Play, Compass, Award } from 'lucide-react';
+import { Calendar, ArrowRight, Play, Compass, Award, MapPin } from 'lucide-react';
+import { db } from '@/lib/firebase';
+import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
@@ -21,6 +23,44 @@ const staggerContainer = {
 };
 
 export default function Home() {
+  const [latestEvent, setLatestEvent] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLatestEvent = async () => {
+      try {
+        const eventsQuery = query(
+          collection(db, 'events'),
+          orderBy('date', 'desc'),
+          limit(1)
+        );
+        const querySnapshot = await getDocs(eventsQuery);
+        if (!querySnapshot.empty) {
+          const doc = querySnapshot.docs[0];
+          const data = doc.data();
+          setLatestEvent({
+            id: doc.id,
+            ...data
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching latest event:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLatestEvent();
+  }, []);
+
+  const formatDate = (dateStr: string) => {
+    try {
+      const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+      return new Date(dateStr).toLocaleDateString('en-US', options);
+    } catch {
+      return dateStr;
+    }
+  };
+
   return (
     <div className="bg-background relative w-full overflow-hidden">
       {/* 1. Fullscreen Cinematic Hero Section */}
@@ -261,37 +301,44 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Static preview event card */}
-        <div className="glass-panel p-6 rounded-2xl flex flex-col md:flex-row items-center gap-8 shadow-sm">
-          <div className="relative w-full md:w-48 h-48 rounded-xl overflow-hidden flex-shrink-0">
-            <Image
-              src="https://images.pexels.com/photos/167636/pexels-photo-167636.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Event banner"
-              fill
-              className="object-cover"
-            />
+        {loading ? (
+          <div className="text-center py-12 text-text-secondary text-sm">
+            Loading latest event...
           </div>
-          <div className="flex-1 space-y-4 w-full text-center md:text-left">
-            <div>
-              <span className="text-xs text-primary font-semibold tracking-widest uppercase">Dec 18, 2026</span>
-              <h3 className="font-serif text-xl sm:text-2xl font-bold text-foreground mt-1">
-                The Heritage Fusion Festival
-              </h3>
-              <p className="text-xs text-text-light mt-1">Concert Hall, New Delhi, India</p>
+        ) : latestEvent ? (
+          <div className="glass-panel p-6 rounded-2xl flex flex-col md:flex-row items-center gap-8 shadow-sm">
+            <div className="relative w-full md:w-48 h-48 rounded-xl overflow-hidden flex-shrink-0 bg-primary/5">
+              <Image
+                src={latestEvent.imageUrl || "https://images.pexels.com/photos/167636/pexels-photo-167636.jpeg?auto=compress&cs=tinysrgb&w=800"}
+                alt={latestEvent.title}
+                fill
+                className="object-cover"
+                sizes="(max-w-768px) 100vw, 192px"
+              />
             </div>
-            <p className="text-xs sm:text-sm text-text-secondary leading-relaxed max-w-2xl">
-              Join us for a premium classical-contemporary crossover performance headline act alongside globally acclaimed instrumental soloists.
-            </p>
+            <div className="flex-1 space-y-4 w-full text-center md:text-left">
+              <div>
+                <span className="text-xs text-primary font-semibold tracking-widest uppercase">
+                  {formatDate(latestEvent.date)}
+                </span>
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-foreground mt-1">
+                  {latestEvent.title}
+                </h3>
+                <div className="flex items-center justify-center md:justify-start space-x-1.5 text-xs text-text-light mt-1">
+                  <MapPin className="w-3.5 h-3.5 text-primary" />
+                  <span>{latestEvent.venue}, {latestEvent.place}</span>
+                </div>
+              </div>
+              <p className="text-xs sm:text-sm text-text-secondary leading-relaxed max-w-2xl font-light">
+                {latestEvent.description}
+              </p>
+            </div>
           </div>
-          <div className="flex-shrink-0 w-full md:w-auto text-center">
-            <Link
-              href="/contact"
-              className="inline-block w-full md:w-auto px-6 py-3 rounded-full border border-primary/20 hover:border-primary text-xs uppercase tracking-wider font-bold text-primary hover:bg-primary hover:text-white transition-all"
-            >
-              Book Passes
-            </Link>
+        ) : (
+          <div className="glass-panel p-12 rounded-2xl text-center text-text-secondary text-sm shadow-sm">
+            No upcoming events scheduled at this time. Check back soon!
           </div>
-        </div>
+        )}
       </section>
 
       {/* 5. Contact / Booking Teaser */}
