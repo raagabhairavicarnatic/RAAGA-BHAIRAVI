@@ -172,7 +172,7 @@ export default function ContactPage() {
 
           {/* Google Map Card */}
           <div className="glass-panel p-3 rounded-3xl overflow-hidden shadow-sm h-full min-h-[350px]">
-           <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d458.3741655328086!2d80.29992037818903!3d13.159617001139003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTPCsDA5JzM1LjUiTiA4MMKwMTcnNTkuOCJF!5e0!3m2!1sen!2sin!4v1781182355634!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d458.3741655328086!2d80.29992037818903!3d13.159617001139003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTPCsDA5JzM1LjUiTiA4MMKwMTcnNTkuOCJF!5e0!3m2!1sen!2sin!4v1781182355634!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
           </div>
         </motion.div>
       </div>
