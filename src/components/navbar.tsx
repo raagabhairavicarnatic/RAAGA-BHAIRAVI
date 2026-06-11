@@ -70,7 +70,7 @@ export default function Navbar() {
                 RAAGA BHAIRAVI
               </span>
               <span className="block text-[9px] uppercase tracking-[0.25em] text-text-secondary">
-                Musical Group
+                Carnatic Music
               </span>
             </div>
           </Link>
