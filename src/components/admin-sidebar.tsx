@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
-import { LayoutDashboard, Calendar, Award, Image as ImageIcon, BookOpen, MessageSquare, LogOut, Music } from 'lucide-react';
+import { LayoutDashboard, Calendar, Award, Image as ImageIcon, BookOpen, LogOut, Music } from 'lucide-react';
 
 const sidebarLinks = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
@@ -13,7 +13,6 @@ const sidebarLinks = [
   { href: '/admin/performances', label: 'Performances', icon: Award },
   { href: '/admin/gallery', label: 'Gallery', icon: ImageIcon },
   { href: '/admin/vision', label: 'Vision & Mission', icon: BookOpen },
-  { href: '/admin/messages', label: 'Live Chats', icon: MessageSquare },
 ];
 
 export default function AdminSidebar() {
