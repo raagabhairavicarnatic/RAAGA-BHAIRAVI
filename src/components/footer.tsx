@@ -90,11 +90,11 @@ export default function Footer() {
             </div>
           </Link>
           <p className="text-text-secondary text-sm max-w-sm leading-relaxed">
-            Echos of Divinity ...Holding Our Carnatic Heritage With Pride, Inspiring Generations Through The Timeless Language Of Music.
+            Echos of Divinity ... Holding Our Carnatic Heritage With Pride, Inspiring Generations Through The Timeless Language Of Music.
           </p>
           <div className="flex items-center space-x-4">
             <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/raaga_bhairavi?igsh=MTBncDkwcG92bm9jdA%3D%3D"
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-text-secondary hover:bg-primary hover:text-white transition-all duration-300"
@@ -103,7 +103,7 @@ export default function Footer() {
               <InstagramIcon className="w-4 h-4" />
             </a>
             <a
-              href="https://youtube.com"
+              href="https://www.youtube.com/@Raagabhairavi.carnatic"
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-text-secondary hover:bg-primary hover:text-white transition-all duration-300"
@@ -112,7 +112,7 @@ export default function Footer() {
               <YoutubeIcon className="w-4 h-4" />
             </a>
             <a
-              href="https://facebook.com"
+              href="https://www.facebook.com/share/17QaGKCxBf/"
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-background flex items-center justify-center text-text-secondary hover:bg-primary hover:text-white transition-all duration-300"
@@ -151,19 +151,19 @@ export default function Footer() {
           <ul className="space-y-4 text-sm text-text-secondary leading-relaxed">
             <li>
               <span className="block font-semibold text-foreground">Phone & WhatsApp:</span>
-              <a href="tel:+1234567890" className="hover:text-primary transition-colors">
-                +1 (234) 567-890
+              <a href="tel:+917358689256" className="hover:text-primary transition-colors">
+                +91 7358689256
               </a>
             </li>
             <li>
               <span className="block font-semibold text-foreground">Email:</span>
-              <a href="mailto:booking@raagabhairavi.com" className="hover:text-primary transition-colors">
-                booking@raagabhairavi.com
+              <a href="mailto:raagabhairavi.carnatic@gmail.com" className="hover:text-primary transition-colors">
+                raagabhairavi.carnatic@gmail.com
               </a>
             </li>
             <li>
-              <span className="block font-semibold text-foreground">Studio Location:</span>
-              Chennai, Tamil Nadu, India
+              <span className="block font-semibold text-foreground">Location:</span>
+              Tiruvottiyur,Chennai,Tamil Nadu
             </li>
           </ul>
         </div>
@@ -173,7 +173,7 @@ export default function Footer() {
         <p>© {currentYear} RAAGA BHAIRAVI. All rights reserved.</p>
         <div className="flex space-x-6 mt-4 md:mt-0">
           <Link href="/admin-login" className="hover:text-primary transition-colors">
-            Admin Portal
+            AdminPortal
           </Link>
           
         </div>
