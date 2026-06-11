@@ -365,33 +365,27 @@ export default function AdminPerformancesPage() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Showcase Image selection from Gallery */}
-                <div className="space-y-1.5 flex flex-col justify-end">
-                  <label className="text-[10px] uppercase font-bold text-text-secondary block">Showcase Image</label>
-                  {form.imageUrl ? (
-                    <div className="flex items-center justify-between bg-white border border-primary/10 rounded-xl p-1.5 w-full">
-                      <div className="flex items-center space-x-3 overflow-hidden">
-                        <img src={form.imageUrl} alt="Preview" className="w-8 h-8 object-cover rounded-lg flex-shrink-0" />
-                        <span className="text-[10px] text-text-secondary truncate max-w-[120px]">Image Selected</span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setShowGallerySelector(true)}
-                        className="text-[10px] uppercase font-bold text-primary hover:text-primary-hover tracking-wider cursor-pointer flex-shrink-0"
-                      >
-                        Change
-                      </button>
-                    </div>
-                  ) : (
+                {/* Image URL with Gallery selector shortcut */}
+                <div className="space-y-1">
+                  <div className="flex justify-between items-center">
+                    <label className="text-[10px] uppercase font-bold text-text-secondary">Showcase Image URL</label>
                     <button
                       type="button"
                       onClick={() => setShowGallerySelector(true)}
-                      className="w-full bg-white border border-primary/10 hover:border-primary rounded-xl py-2.5 text-xs text-text-secondary hover:text-primary font-semibold transition-colors cursor-pointer"
+                      className="text-[9px] uppercase font-bold text-primary hover:text-primary-hover tracking-wider cursor-pointer"
                     >
-                      Select from Gallery
+                      Pick from Gallery
                     </button>
-                  )}
-                  <input type="hidden" name="imageUrl" required value={form.imageUrl} />
+                  </div>
+                  <input
+                    type="url"
+                    name="imageUrl"
+                    required
+                    value={form.imageUrl}
+                    onChange={handleChange}
+                    className="w-full bg-white border border-primary/10 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-primary text-foreground"
+                    placeholder="e.g. https://images.pexels.com/...jpg"
+                  />
                 </div>
 
                 {/* Video URL */}

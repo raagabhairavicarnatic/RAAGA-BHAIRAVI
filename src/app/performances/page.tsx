@@ -31,7 +31,7 @@ const renderBoldText = (text: string) => {
   const parts = text.split(/(\*\*.*?\*\*)/g);
   return parts.map((part, index) => {
     if (part.startsWith('**') && part.endsWith('**')) {
-      return <span key={index} className="font-normal text-foreground">{part.slice(2, -2)}</span>;
+      return <span key={index} className="font-medium text-foreground">{part.slice(2, -2)}</span>;
     }
     return part;
   });
@@ -137,18 +137,6 @@ export default function PerformancesPage() {
                           className="object-cover transition-transform duration-700 group-hover:scale-105"
                           sizes="(max-w-768px) 100vw, 500px"
                         />
-                        {perf.videoUrl && (
-                          <a
-                            href={perf.videoUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                          >
-                            <div className="w-16 h-16 rounded-full bg-primary/95 text-white flex items-center justify-center shadow-lg transform scale-90 group-hover:scale-100 transition-transform duration-300">
-                              <Play className="w-6 h-6 fill-white ml-1" />
-                            </div>
-                          </a>
-                        )}
                       </div>
                     </div>
 

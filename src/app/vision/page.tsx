@@ -29,7 +29,7 @@ const renderBoldText = (text: string) => {
   const parts = text.split(/(\*\*.*?\*\*)/g);
   return parts.map((part, index) => {
     if (part.startsWith('**') && part.endsWith('**')) {
-      return <span key={index} className="font-normal text-foreground">{part.slice(2, -2)}</span>;
+      return <span key={index} className="font-medium text-foreground">{part.slice(2, -2)}</span>;
     }
     return part;
   });
