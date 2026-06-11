@@ -77,7 +77,7 @@ export default function Home() {
           <motion.p
             variants={fadeInUp}
             className="text-sm sm:text-base max-w-lg leading-relaxed font-light"
-            style={{ color: '#1a1a1a' }}
+            style={{ color: '#111111' }}
           >
            Holding Our Carnatic Heritage With Pride, Inspiring Generations Through The Timeless Language Of Music.
           </motion.p>
@@ -131,7 +131,7 @@ export default function Home() {
             Transcending Musical Boundaries Through Pure Artistry
           </h2>
           <p className="text-text-secondary text-sm sm:text-base leading-relaxed">
-            Formed in the heart of Carnatic heritage, RAAGA BHAIRAVI blends classical raga hierarchies with global jazz, orchestral harmonies, and experimental sounds. Our performance acts as a sacred portal, bridging traditions to contemporary auditoriums worldwide.
+            Formed In The Heart Of Carnatic Heritage, RAAGA BHAIRAVI Blends Classical Raga Hierarchies , Orchestral Harmonies, And Experimental Sounds.We Have Had The Privilege Of Performing At Various Concerts In Mutt, Stages, And Temples, Sharing The Beauty Of Carnatic Music With Diverse Audiences.Our Team Comprises Six Enthusiastic Students, United By A Common Love For Music.Together, We Strive To Deliver Soulful And Memorable Performances That Reflect Both Tradition And Creativity
           </p>
           <div className="pt-2">
             <Link
@@ -176,7 +176,7 @@ export default function Home() {
               Grand Live Concerts
             </h2>
             <p className="text-text-secondary text-xs sm:text-sm">
-              Discover highlights from our world tours and concert hall recordings.
+              Discover highlights from our divine tours and concert hall recordings.
             </p>
           </div>
 
