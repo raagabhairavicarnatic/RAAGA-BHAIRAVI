@@ -64,13 +64,9 @@ export default function Home() {
           allPerf.push({ id: doc.id, ...doc.data() });
         });
 
-        // Get pinned ones first
-        const pinned = allPerf.filter(p => p.pinned === true);
-        const unpinned = allPerf.filter(p => p.pinned !== true);
-
-        // Select up to 2
-        const selected = [...pinned, ...unpinned].slice(0, 2);
-        setHomePerformances(selected);
+        // Get pinned ones only (up to 2)
+        const pinned = allPerf.filter(p => p.pinned === true).slice(0, 2);
+        setHomePerformances(pinned);
       } catch (error) {
         console.error('Error fetching home performances:', error);
       } finally {

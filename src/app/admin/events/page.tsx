@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, onSnapshot, query, orderBy, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, onSnapshot, query, orderBy, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { auth } from '@/lib/firebase';
 import { Calendar, Plus, Edit2, Trash2, X, MapPin } from 'lucide-react';
 
 interface EventItem {
@@ -92,16 +93,21 @@ export default function AdminEventsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const adminEmail = auth.currentUser?.email || 'Unknown';
     try {
       if (editingEvent) {
-        // Update
         await updateDoc(doc(db, 'events', editingEvent.id), {
           ...form,
+          updatedAt: serverTimestamp(),
+          updatedBy: adminEmail,
         });
       } else {
-        // Add
         await addDoc(collection(db, 'events'), {
           ...form,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+          createdBy: adminEmail,
+          updatedBy: adminEmail,
         });
       }
       setShowModal(false);

@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, onSnapshot, query, orderBy, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, onSnapshot, query, orderBy, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { auth } from '@/lib/firebase';
 import { Award, Plus, Edit2, Trash2, X, MapPin, Video, Pin } from 'lucide-react';
 
 interface PerformanceItem {
@@ -117,6 +118,7 @@ export default function AdminPerformancesPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const adminEmail = auth.currentUser?.email || 'Unknown';
     try {
       const dataPayload = {
         title: form.title,
@@ -126,12 +128,18 @@ export default function AdminPerformancesPage() {
         venue: form.venue,
         images: form.imageUrl ? [form.imageUrl] : [],
         videoUrl: form.videoUrl || '',
+        updatedAt: serverTimestamp(),
+        updatedBy: adminEmail,
       };
 
       if (editingPerf) {
         await updateDoc(doc(db, 'performances', editingPerf.id), dataPayload);
       } else {
-        await addDoc(collection(db, 'performances'), dataPayload);
+        await addDoc(collection(db, 'performances'), {
+          ...dataPayload,
+          createdAt: serverTimestamp(),
+          createdBy: adminEmail,
+        });
       }
       setShowModal(false);
     } catch (error) {

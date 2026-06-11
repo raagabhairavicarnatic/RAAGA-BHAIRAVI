@@ -31,7 +31,7 @@ export default function EventsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const eventsQuery = query(collection(db, 'events'), orderBy('date', 'asc'));
+    const eventsQuery = query(collection(db, 'events'), orderBy('date', 'desc'));
 
     const unsubscribe = onSnapshot(eventsQuery, (snapshot) => {
       const items: EventItem[] = [];
@@ -86,7 +86,7 @@ export default function EventsPage() {
             Upcoming Events
           </h1>
           <p className="text-text-secondary text-sm sm:text-base max-w-md mx-auto">
-            Book tickets and join our journey of classical majesty and contemporary elegance live in concert.
+            Join our journey of classical majesty and contemporary elegance live in concert.
           </p>
           <div className="w-24 h-[1px] bg-primary/30 mx-auto mt-6" />
         </motion.div>

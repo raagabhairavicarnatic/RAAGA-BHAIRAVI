@@ -2,36 +2,71 @@
 
 import React, { useEffect, useState } from 'react';
 import { auth, db } from '@/lib/firebase';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { Calendar, Award, ImageIcon, MessageSquare, ShieldAlert, UserCheck } from 'lucide-react';
+import { collection, getDocs, orderBy, query, limit } from 'firebase/firestore';
+import { Calendar, Award, ImageIcon, BookOpen, ShieldAlert, UserCheck, Clock, User } from 'lucide-react';
+
+interface SectionMeta {
+  count: number;
+  lastUpdated: string | null;
+  lastUpdatedBy: string | null;
+}
 
 export default function AdminDashboardPage() {
-  const [stats, setStats] = useState({
-    events: 0,
-    performances: 0,
-    gallery: 0,
-    unreadMessages: 0,
-  });
+  const [events, setEvents] = useState<SectionMeta>({ count: 0, lastUpdated: null, lastUpdatedBy: null });
+  const [performances, setPerformances] = useState<SectionMeta>({ count: 0, lastUpdated: null, lastUpdatedBy: null });
+  const [gallery, setGallery] = useState<SectionMeta>({ count: 0, lastUpdated: null, lastUpdatedBy: null });
+  const [vision, setVision] = useState<SectionMeta>({ count: 0, lastUpdated: null, lastUpdatedBy: null });
   const [loading, setLoading] = useState(true);
   const adminEmail = auth.currentUser?.email || 'Administrator';
+
+  const formatDate = (ts: any): string => {
+    if (!ts) return 'N/A';
+    try {
+      const date = ts?.toDate ? ts.toDate() : new Date(ts);
+      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    } catch {
+      return 'N/A';
+    }
+  };
+
+  const getLatestMeta = (docs: any[]): { lastUpdated: string | null; lastUpdatedBy: string | null } => {
+    if (docs.length === 0) return { lastUpdated: null, lastUpdatedBy: null };
+    // Sort by updatedAt or createdAt descending
+    const sorted = [...docs].sort((a, b) => {
+      const aTime = a.updatedAt || a.createdAt || null;
+      const bTime = b.updatedAt || b.createdAt || null;
+      if (!aTime) return 1;
+      if (!bTime) return -1;
+      const aMs = aTime?.toDate ? aTime.toDate().getTime() : new Date(aTime).getTime();
+      const bMs = bTime?.toDate ? bTime.toDate().getTime() : new Date(bTime).getTime();
+      return bMs - aMs;
+    });
+    const latest = sorted[0];
+    return {
+      lastUpdated: formatDate(latest.updatedAt || latest.createdAt || null),
+      lastUpdatedBy: latest.updatedBy || latest.createdBy || null,
+    };
+  };
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const eventsSnap = await getDocs(collection(db, 'events'));
-        const perfSnap = await getDocs(collection(db, 'performances'));
-        const gallerySnap = await getDocs(collection(db, 'gallery'));
-        
-        // Count unread chats from admin point of view (unreadByAdmin == true)
-        const chatQuery = query(collection(db, 'chats'), where('unreadByAdmin', '==', true));
-        const chatSnap = await getDocs(chatQuery);
+        const [eventsSnap, perfSnap, gallerySnap, visionSnap] = await Promise.all([
+          getDocs(collection(db, 'events')),
+          getDocs(collection(db, 'performances')),
+          getDocs(collection(db, 'gallery')),
+          getDocs(collection(db, 'vision')),
+        ]);
 
-        setStats({
-          events: eventsSnap.size,
-          performances: perfSnap.size,
-          gallery: gallerySnap.size,
-          unreadMessages: chatSnap.size,
-        });
+        const eventDocs = eventsSnap.docs.map(d => d.data());
+        const perfDocs = perfSnap.docs.map(d => d.data());
+        const galleryDocs = gallerySnap.docs.map(d => d.data());
+        const visionDocs = visionSnap.docs.map(d => d.data());
+
+        setEvents({ count: eventsSnap.size, ...getLatestMeta(eventDocs) });
+        setPerformances({ count: perfSnap.size, ...getLatestMeta(perfDocs) });
+        setGallery({ count: gallerySnap.size, ...getLatestMeta(galleryDocs) });
+        setVision({ count: visionSnap.size, ...getLatestMeta(visionDocs) });
       } catch (error) {
         console.error('Error fetching dashboard stats:', error);
       } finally {
@@ -41,6 +76,13 @@ export default function AdminDashboardPage() {
 
     fetchStats();
   }, []);
+
+  const sections = [
+    { label: 'Total Events', icon: Calendar, data: events, href: '/admin/events' },
+    { label: 'Performances', icon: Award, data: performances, href: '/admin/performances' },
+    { label: 'Gallery Items', icon: ImageIcon, data: gallery, href: '/admin/gallery' },
+    { label: 'Vision & Mission', icon: BookOpen, data: vision, href: '/admin/vision' },
+  ];
 
   return (
     <div className="space-y-10">
@@ -63,50 +105,37 @@ export default function AdminDashboardPage() {
       {loading ? (
         <div className="text-text-secondary text-sm">Loading statistical metrics...</div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Events */}
-          <div className="glass-panel p-6 rounded-2xl flex items-center justify-between border border-primary/5 shadow-sm">
-            <div className="space-y-1">
-              <span className="text-[10px] text-text-secondary uppercase tracking-wider font-semibold">Total Events</span>
-              <p className="font-serif text-3xl font-bold text-foreground">{stats.events}</p>
-            </div>
-            <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center text-primary">
-              <Calendar className="w-6 h-6" />
-            </div>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {sections.map(({ label, icon: Icon, data, href }) => (
+            <a
+              key={label}
+              href={href}
+              className="glass-panel p-6 rounded-2xl border border-primary/5 shadow-sm hover:shadow-md hover:border-primary/20 transition-all space-y-4 group"
+            >
+              {/* Top Row */}
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-text-secondary uppercase tracking-wider font-semibold">{label}</span>
+                <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                  <Icon className="w-5 h-5" />
+                </div>
+              </div>
 
-          {/* Performances */}
-          <div className="glass-panel p-6 rounded-2xl flex items-center justify-between border border-primary/5 shadow-sm">
-            <div className="space-y-1">
-              <span className="text-[10px] text-text-secondary uppercase tracking-wider font-semibold">Performances</span>
-              <p className="font-serif text-3xl font-bold text-foreground">{stats.performances}</p>
-            </div>
-            <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center text-primary">
-              <Award className="w-6 h-6" />
-            </div>
-          </div>
+              {/* Count */}
+              <p className="font-serif text-4xl font-bold text-foreground">{data.count}</p>
 
-          {/* Gallery */}
-          <div className="glass-panel p-6 rounded-2xl flex items-center justify-between border border-primary/5 shadow-sm">
-            <div className="space-y-1">
-              <span className="text-[10px] text-text-secondary uppercase tracking-wider font-semibold">Gallery Items</span>
-              <p className="font-serif text-3xl font-bold text-foreground">{stats.gallery}</p>
-            </div>
-            <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center text-primary">
-              <ImageIcon className="w-6 h-6" />
-            </div>
-          </div>
-
-          {/* Chats */}
-          <div className="glass-panel p-6 rounded-2xl flex items-center justify-between border border-primary/5 shadow-sm">
-            <div className="space-y-1">
-              <span className="text-[10px] text-text-secondary uppercase tracking-wider font-semibold">Active Chats</span>
-              <p className="font-serif text-3xl font-bold text-foreground">{stats.unreadMessages}</p>
-            </div>
-            <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center text-primary">
-              <MessageSquare className="w-6 h-6" />
-            </div>
-          </div>
+              {/* Meta info */}
+              <div className="border-t border-primary/5 pt-3 space-y-1.5">
+                <div className="flex items-center gap-1.5 text-[10px] text-text-secondary">
+                  <Clock className="w-3 h-3 text-primary flex-shrink-0" />
+                  <span>Last updated: <span className="text-foreground font-medium">{data.lastUpdated || 'No records yet'}</span></span>
+                </div>
+                <div className="flex items-center gap-1.5 text-[10px] text-text-secondary">
+                  <User className="w-3 h-3 text-primary flex-shrink-0" />
+                  <span>Updated by: <span className="text-foreground font-medium">{data.lastUpdatedBy || '—'}</span></span>
+                </div>
+              </div>
+            </a>
+          ))}
         </div>
       )}
 
@@ -115,11 +144,10 @@ export default function AdminDashboardPage() {
         <h2 className="font-serif text-xl font-bold text-foreground">Quick Administration Guide</h2>
         <div className="w-12 h-[1px] bg-primary/20" />
         <ul className="list-disc pl-5 text-xs text-text-secondary space-y-2 leading-relaxed">
-          <li><strong>Events:</strong> Add new performances or tours, edit timings, and update banners. Changes reflect instantly on the public `/events` page.</li>
-          <li><strong>Performances:</strong> Log performance history and collaborations. You can optionally link a YouTube url to show a playable play button on their thumbnails.</li>
+          <li><strong>Events:</strong> Add new performances or tours, edit timings, and update banners. Changes reflect instantly on the public <code>/events</code> page.</li>
+          <li><strong>Performances:</strong> Log performance history and collaborations. Pin up to 2 performances to feature them on the Home page. Optionally link a YouTube URL to show a play button.</li>
           <li><strong>Gallery:</strong> Upload images or input YouTube links to show in the Pinterest masonry layout.</li>
-          <li><strong>Vision & Mission:</strong> Update the overarching group details and philosophical statements directly.</li>
-          <li><strong>Live Chats:</strong> Connect in real-time with users who send messages via the floating chat helper. You can read, view unread statuses, and type replies instantly.</li>
+          <li><strong>Vision &amp; Mission:</strong> Update the overarching group details and philosophical statements directly.</li>
         </ul>
       </div>
     </div>

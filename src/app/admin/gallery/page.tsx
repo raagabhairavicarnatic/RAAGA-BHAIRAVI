@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { db } from '@/lib/firebase';
+import { db, auth } from '@/lib/firebase';
 import { supabase } from '@/lib/supabase';
-import { collection, onSnapshot, query, orderBy, addDoc, deleteDoc, doc } from 'firebase/firestore';
-import { ImageIcon, Plus, Trash2, X, Play, Upload } from 'lucide-react';
+import { collection, onSnapshot, query, orderBy, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { ImageIcon, Plus, Trash2, Edit2, X, Play, Upload } from 'lucide-react';
 
 interface GalleryItem {
   id: string;
@@ -19,6 +19,7 @@ export default function AdminGalleryPage() {
   const [items, setItems] = useState<GalleryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [editingItem, setEditingItem] = useState<GalleryItem | null>(null);
   
   // Form states
   const [form, setForm] = useState({
@@ -91,6 +92,13 @@ export default function AdminGalleryPage() {
 
       if (form.type === 'image') {
         if (uploadFile) {
+          // If editing and user uploads a new image, delete the old Supabase image first
+          if (editingItem && editingItem.imageUrl.includes('supabase.co')) {
+            const parts = editingItem.imageUrl.split('/gallery/');
+            const fileName = parts[parts.length - 1];
+            await supabase.storage.from('gallery').remove([fileName]).catch((err) => console.warn(err));
+          }
+
           // Upload actual file to Supabase Storage
           const fileName = `${Date.now()}_${uploadFile.name}`;
           const { error: uploadError } = await supabase.storage
@@ -106,6 +114,9 @@ export default function AdminGalleryPage() {
             .from('gallery')
             .getPublicUrl(fileName);
           finalImageUrl = publicUrl;
+        } else if (!finalImageUrl && editingItem) {
+          // Retain existing image if editing and no new file or URL is provided
+          finalImageUrl = editingItem.imageUrl;
         } else if (!finalImageUrl) {
           alert('Please upload an image file or input a valid Image URL.');
           setSubmitting(false);
@@ -122,15 +133,25 @@ export default function AdminGalleryPage() {
         finalImageUrl = `https://img.youtube.com/vi/${yid}/0.jpg`;
       }
 
+      const adminEmail = auth.currentUser?.email || 'Unknown';
       const payload = {
         type: form.type,
         title: form.title,
         imageUrl: finalImageUrl,
         youtubeUrl: form.type === 'youtube' ? form.youtubeUrl.trim() : null,
-        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        updatedBy: adminEmail,
       };
 
-      await addDoc(collection(db, 'gallery'), payload);
+      if (editingItem) {
+        await updateDoc(doc(db, 'gallery', editingItem.id), payload);
+      } else {
+        await addDoc(collection(db, 'gallery'), {
+          ...payload,
+          createdAt: Date.now(),
+          createdBy: adminEmail,
+        });
+      }
       
       // Reset & close
       setForm({
@@ -140,6 +161,7 @@ export default function AdminGalleryPage() {
         youtubeUrl: '',
       });
       setUploadFile(null);
+      setEditingItem(null);
       setShowModal(false);
     } catch (error) {
       console.error('Error saving gallery item:', error);
@@ -150,11 +172,24 @@ export default function AdminGalleryPage() {
   };
 
   const openAddModal = () => {
+    setEditingItem(null);
     setForm({
       type: 'image',
       title: '',
       imageUrl: '',
       youtubeUrl: '',
+    });
+    setUploadFile(null);
+    setShowModal(true);
+  };
+
+  const openEditModal = (item: GalleryItem) => {
+    setEditingItem(item);
+    setForm({
+      type: item.type,
+      title: item.title,
+      imageUrl: item.type === 'image' ? item.imageUrl : '',
+      youtubeUrl: item.type === 'youtube' ? item.youtubeUrl || '' : '',
     });
     setUploadFile(null);
     setShowModal(true);
@@ -201,19 +236,28 @@ export default function AdminGalleryPage() {
                 )}
               </div>
 
-              {/* Info & Delete */}
+              {/* Info & Actions */}
               <div className="flex items-center justify-between px-1">
                 <div>
-                  <h4 className="text-xs font-bold text-foreground truncate max-w-[150px]">{item.title}</h4>
+                  <h4 className="text-xs font-bold text-foreground truncate max-w-[120px]">{item.title}</h4>
                   <span className="text-[9px] uppercase tracking-wider text-text-light">{item.type}</span>
                 </div>
-                <button
-                  onClick={() => handleDelete(item)}
-                  className="w-8 h-8 rounded-xl border border-primary/10 text-text-secondary hover:border-primary-deep hover:text-primary-deep flex items-center justify-center cursor-pointer transition-colors"
-                  title="Delete Item"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+                <div className="flex items-center space-x-2 flex-shrink-0">
+                  <button
+                    onClick={() => openEditModal(item)}
+                    className="w-8 h-8 rounded-xl border border-primary/10 text-text-secondary hover:border-primary hover:text-primary flex items-center justify-center cursor-pointer transition-colors"
+                    title="Edit Item"
+                  >
+                    <Edit2 className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(item)}
+                    className="w-8 h-8 rounded-xl border border-primary/10 text-text-secondary hover:border-primary-deep hover:text-primary-deep flex items-center justify-center cursor-pointer transition-colors"
+                    title="Delete Item"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
           ))}
@@ -231,7 +275,9 @@ export default function AdminGalleryPage() {
               <X className="w-6 h-6" />
             </button>
 
-            <h2 className="font-serif text-2xl font-bold text-foreground mb-6">Add Gallery Item</h2>
+            <h2 className="font-serif text-2xl font-bold text-foreground mb-6">
+              {editingItem ? 'Edit Gallery Item' : 'Add Gallery Item'}
+            </h2>
 
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Type Select */}
@@ -337,7 +383,7 @@ export default function AdminGalleryPage() {
                 disabled={submitting}
                 className="w-full py-3.5 rounded-xl bg-primary hover:bg-primary-hover text-white text-xs font-bold uppercase tracking-widest glow-button transition-colors cursor-pointer flex items-center justify-center"
               >
-                <span>{submitting ? 'Processing...' : 'Add Item'}</span>
+                <span>{submitting ? 'Processing...' : (editingItem ? 'Save Changes' : 'Add Item')}</span>
               </button>
             </form>
           </div>

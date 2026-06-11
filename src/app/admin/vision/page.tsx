@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { db } from '@/lib/firebase';
+import { auth, db } from '@/lib/firebase';
 import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { BookOpen, Save, CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -48,7 +48,8 @@ export default function AdminVisionPage() {
     try {
       await setDoc(doc(db, 'vision', 'data'), {
         ...form,
-        lastUpdated: Date.now(),
+        updatedAt: Date.now(),
+        updatedBy: auth.currentUser?.email || 'Unknown',
       });
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
