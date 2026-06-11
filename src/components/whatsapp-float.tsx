@@ -11,7 +11,7 @@ export default function WhatsAppFloat() {
   if (isAdminRoute) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex items-center justify-center">
+    <div className="fixed bottom-6 right-6 z-50 w-14 h-14 flex items-center justify-center">
       {/* Expanding Pulse Circle */}
       <motion.div
         className="absolute w-14 h-14 rounded-full bg-[#25D366]/40 pointer-events-none z-0"
