@@ -85,12 +85,12 @@ export default function Footer() {
                 RAAGA BHAIRAVI
               </span>
               <span className="block text-[9px] uppercase tracking-[0.25em] text-text-secondary">
-                Musical Group
+                Carnatic Music
               </span>
             </div>
           </Link>
           <p className="text-text-secondary text-sm max-w-sm leading-relaxed">
-            An elite premium musical group dedicated to classical, contemporary, and fusion carnatic performances. Bringing emotional and artistic luxury compositions to life.
+            Echos of Divinity ...Holding Our Carnatic Heritage With Pride, Inspiring Generations Through The Timeless Language Of Music.
           </p>
           <div className="flex items-center space-x-4">
             <a
