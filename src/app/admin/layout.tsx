@@ -16,6 +16,13 @@ export default function AdminLayout({
   const router = useRouter();
 
   useEffect(() => {
+    // Check current auth status synchronously to prevent navigation delays/hangs
+    if (auth.currentUser && isAdminUser(auth.currentUser.email)) {
+      setUser(auth.currentUser);
+      setLoading(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (!currentUser || !isAdminUser(currentUser.email)) {
         // Redirect if not logged in or not admin

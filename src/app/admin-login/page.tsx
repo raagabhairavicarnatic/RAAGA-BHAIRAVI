@@ -23,6 +23,12 @@ export default function AdminLoginPage() {
 
   // If already logged in as admin, redirect directly to dashboard
   useEffect(() => {
+    // If already logged in, redirect synchronously to prevent redirect lag
+    if (auth.currentUser && isAdminUser(auth.currentUser.email)) {
+      router.push('/admin');
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user && isAdminUser(user.email)) {
         router.push('/admin');

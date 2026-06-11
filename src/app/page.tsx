@@ -116,7 +116,7 @@ export default function Home() {
   return (
     <div className="bg-background relative w-full overflow-hidden">
       {/* 1. Fullscreen Cinematic Hero Section */}
-      <section className="relative w-full h-screen flex flex-col justify-center items-center overflow-hidden">
+      <section className="relative w-full h-[65vh] sm:h-screen flex flex-col justify-center items-center overflow-hidden">
         {/* Background Cinematic Image */}
         <Image
           src="/homeback.png"
@@ -140,10 +140,10 @@ export default function Home() {
           variants={staggerContainer}
           initial="initial"
           animate="animate"
-          className="relative z-20 text-center max-w-4xl px-6 flex flex-col items-center justify-center space-y-5 mt-28"
+          className="relative z-20 text-center max-w-4xl px-6 flex flex-col items-center justify-center space-y-5 mt-16 sm:mt-28"
         >
           {/* Spacer to preserve space where the logo was */}
-          <div className="w-44 h-44 sm:w-56 sm:h-56 mb-4 pointer-events-none" />
+          <div className="w-20 h-20 sm:w-56 sm:h-56 mb-2 sm:mb-4 pointer-events-none" />
 
           {/* Group Title */}
           <motion.h1

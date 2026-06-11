@@ -84,7 +84,7 @@ export default function LoadingScreen() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="font-cinzel text-4xl sm:text-6xl lg:text-7xl font-bold tracking-[0.3em] text-[#c60001] uppercase mb-3"
+              className="font-cinzel text-4xl sm:text-6xl lg:text-7xl font-bold tracking-normal text-[#c60001] uppercase mb-3"
             >
               RAAGA BHAIRAVI
             </motion.h1>
