@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, onSnapshot, query, orderBy, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
-import { Award, Plus, Edit2, Trash2, X, MapPin, Video } from 'lucide-react';
+import { Award, Plus, Edit2, Trash2, X, MapPin, Video, Pin } from 'lucide-react';
 
 interface PerformanceItem {
   id: string;
@@ -14,6 +14,7 @@ interface PerformanceItem {
   venue: string;
   images: string[];
   videoUrl?: string;
+  pinned?: boolean;
 }
 
 export default function AdminPerformancesPage() {
@@ -48,6 +49,7 @@ export default function AdminPerformancesPage() {
           venue: data.venue,
           images: data.images || [],
           videoUrl: data.videoUrl || '',
+          pinned: data.pinned || false,
         });
       });
       setPerformances(items);
@@ -56,6 +58,24 @@ export default function AdminPerformancesPage() {
 
     return () => unsubscribe();
   }, []);
+
+  const handleTogglePin = async (id: string, currentlyPinned: boolean) => {
+    const pinnedCount = performances.filter(p => p.pinned === true).length;
+    
+    if (!currentlyPinned && pinnedCount >= 2) {
+      alert("You can only pin up to 2 performances. Please unpin one of the other pinned performances first.");
+      return;
+    }
+
+    try {
+      await updateDoc(doc(db, 'performances', id), {
+        pinned: !currentlyPinned
+      });
+    } catch (error) {
+      console.error('Error toggling pin:', error);
+      alert('Failed to update pin status.');
+    }
+  };
 
   const openAddModal = () => {
     setEditingPerf(null);
@@ -176,6 +196,12 @@ export default function AdminPerformancesPage() {
                       Video Linked
                     </span>
                   )}
+                  {perf.pinned && (
+                    <span className="text-[9px] text-[#c60001] bg-[#c60001]/5 px-2 py-0.5 rounded-full flex items-center gap-1 font-semibold">
+                      <Pin className="w-3.5 h-3.5 fill-current" />
+                      Pinned to Home
+                    </span>
+                  )}
                 </div>
                 <h3 className="font-serif text-xl font-bold text-foreground">{perf.title}</h3>
                 <p className="text-xs text-text-secondary line-clamp-2 leading-relaxed font-light">{perf.description}</p>
@@ -183,6 +209,17 @@ export default function AdminPerformancesPage() {
 
               {/* Action buttons */}
               <div className="flex items-center space-x-3 flex-shrink-0">
+                <button
+                  onClick={() => handleTogglePin(perf.id, perf.pinned || false)}
+                  className={`w-10 h-10 rounded-xl border flex items-center justify-center cursor-pointer transition-colors ${
+                    perf.pinned
+                      ? 'bg-primary border-primary text-white hover:bg-primary-hover hover:border-primary-hover'
+                      : 'border-primary/10 text-text-secondary hover:border-primary hover:text-primary'
+                  }`}
+                  title={perf.pinned ? "Unpin from Home" : "Pin to Home"}
+                >
+                  <Pin className={`w-4 h-4 ${perf.pinned ? 'fill-current' : ''}`} />
+                </button>
                 <button
                   onClick={() => openEditModal(perf)}
                   className="w-10 h-10 rounded-xl border border-primary/10 text-text-secondary hover:border-primary hover:text-primary flex items-center justify-center cursor-pointer transition-colors"

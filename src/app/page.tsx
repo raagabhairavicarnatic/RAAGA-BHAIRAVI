@@ -25,6 +25,8 @@ const staggerContainer = {
 export default function Home() {
   const [latestEvent, setLatestEvent] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [homePerformances, setHomePerformances] = useState<any[]>([]);
+  const [loadingPerf, setLoadingPerf] = useState(true);
 
   useEffect(() => {
     const fetchLatestEvent = async () => {
@@ -49,7 +51,35 @@ export default function Home() {
         setLoading(false);
       }
     };
+
+    const fetchHomePerformances = async () => {
+      try {
+        const perfQuery = query(
+          collection(db, 'performances'),
+          orderBy('date', 'desc')
+        );
+        const querySnapshot = await getDocs(perfQuery);
+        const allPerf: any[] = [];
+        querySnapshot.forEach((doc) => {
+          allPerf.push({ id: doc.id, ...doc.data() });
+        });
+
+        // Get pinned ones first
+        const pinned = allPerf.filter(p => p.pinned === true);
+        const unpinned = allPerf.filter(p => p.pinned !== true);
+
+        // Select up to 2
+        const selected = [...pinned, ...unpinned].slice(0, 2);
+        setHomePerformances(selected);
+      } catch (error) {
+        console.error('Error fetching home performances:', error);
+      } finally {
+        setLoadingPerf(false);
+      }
+    };
+
     fetchLatestEvent();
+    fetchHomePerformances();
   }, []);
 
   const formatDate = (dateStr: string) => {
@@ -221,49 +251,40 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6">
-            {/* Performance Card 1 */}
-            <motion.div
-              whileHover={{ y: -5 }}
-              transition={{ duration: 0.3 }}
-              className="glass-panel p-4 rounded-2xl flex flex-col space-y-4 hover:shadow-lg transition-shadow"
-            >
-              <div className="relative h-64 rounded-xl overflow-hidden shadow-sm">
-                <Image
-                  src="https://images.pexels.com/photos/1916824/pexels-photo-1916824.jpeg?auto=compress&cs=tinysrgb&w=800"
-                  alt="Concert scene"
-                  fill
-                  className="object-cover"
-                />
+            {loadingPerf ? (
+              <div className="col-span-2 text-center py-12 text-text-secondary text-sm">
+                Loading performances...
               </div>
-              <div className="space-y-2">
-                <h3 className="font-serif font-bold text-lg text-foreground">Symphony Hall Concert</h3>
-                <p className="text-xs text-text-secondary leading-relaxed line-clamp-2">
-                  A premium collaborative performance with the local Chamber Orchestra featuring complex violin and percussion jugalbandis.
-                </p>
+            ) : homePerformances.length === 0 ? (
+              <div className="col-span-2 glass-panel p-12 rounded-2xl text-center text-text-secondary text-sm border border-primary/5">
+                No featured performances at this time.
               </div>
-            </motion.div>
-
-            {/* Performance Card 2 */}
-            <motion.div
-              whileHover={{ y: -5 }}
-              transition={{ duration: 0.3 }}
-              className="glass-panel p-4 rounded-2xl flex flex-col space-y-4 hover:shadow-lg transition-shadow"
-            >
-              <div className="relative h-64 rounded-xl overflow-hidden shadow-sm">
-                <Image
-                  src="https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=800"
-                  alt="Concert scene 2"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="space-y-2">
-                <h3 className="font-serif font-bold text-lg text-foreground">Global Carnatic Fusion Tour</h3>
-                <p className="text-xs text-text-secondary leading-relaxed line-clamp-2">
-                  Showcasing contemporary improvisations of classic ragas combined with western rhythms and ambient synthesizers.
-                </p>
-              </div>
-            </motion.div>
+            ) : (
+              homePerformances.map((perf) => (
+                <motion.div
+                  key={perf.id}
+                  whileHover={{ y: -5 }}
+                  transition={{ duration: 0.3 }}
+                  className="glass-panel p-4 rounded-2xl flex flex-col space-y-4 hover:shadow-lg transition-shadow"
+                >
+                  <div className="relative h-64 rounded-xl overflow-hidden shadow-sm bg-primary/5">
+                    <Image
+                      src={perf.images?.[0] || 'https://images.pexels.com/photos/164743/pexels-photo-164743.jpeg?auto=compress&cs=tinysrgb&w=800'}
+                      alt={perf.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-w-768px) 100vw, 500px"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="font-serif font-bold text-lg text-foreground">{perf.title}</h3>
+                    <p className="text-xs text-text-secondary leading-relaxed line-clamp-2 font-light">
+                      {perf.description}
+                    </p>
+                  </div>
+                </motion.div>
+              ))
+            )}
           </div>
 
           <div className="text-center pt-6">
