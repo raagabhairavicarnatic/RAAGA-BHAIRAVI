@@ -116,17 +116,45 @@ export default function Home() {
   return (
     <div className="bg-background relative w-full overflow-hidden">
       {/* 1. Fullscreen Cinematic Hero Section */}
-      <section className="relative w-full h-[65vh] sm:h-screen flex flex-col justify-center items-center overflow-hidden">
-        {/* Background Cinematic Image */}
-        <Image
-          src="/homeback.png"
-          alt="RAAGA BHAIRAVI Cinematic Background"
-          fill
-          className="absolute top-0 left-0 w-full h-full object-cover object-[center_top] z-0"
-          sizes="100vw"
-          priority
-          quality={90}
-        />
+      <section className="relative w-full h-screen flex flex-col justify-center items-center overflow-hidden">
+        {/* Background Cinematic Image (Blurred on mobile to fill viewport height, covers on desktop) */}
+        <div className="absolute inset-0 w-full h-full z-0 block sm:hidden">
+          <Image
+            src="/homeback.png"
+            alt="RAAGA BHAIRAVI Blurred Background"
+            fill
+            className="object-cover object-[center_top] filter blur-xl opacity-35"
+            sizes="100vw"
+            priority
+            quality={50}
+          />
+        </div>
+
+        {/* Foreground Cinematic Image (Framed, sharp, showing all 3 people on mobile) */}
+        <div className="absolute top-[88px] left-4 right-4 aspect-[1436/707] rounded-2xl overflow-hidden shadow-lg border border-white/30 z-20 block sm:hidden">
+          <Image
+            src="/homeback.png"
+            alt="RAAGA BHAIRAVI Painting"
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
+            quality={90}
+          />
+        </div>
+
+        {/* Desktop Background Cinematic Image (Cover, hidden on mobile) */}
+        <div className="absolute inset-0 w-full h-full z-0 hidden sm:block">
+          <Image
+            src="/homeback.png"
+            alt="RAAGA BHAIRAVI Cinematic Background"
+            fill
+            className="object-cover object-[center_top]"
+            sizes="100vw"
+            priority
+            quality={90}
+          />
+        </div>
 
         {/* Cinematic overlay: nearly transparent at top (faces visible), soft fade at bottom for text */}
         <div className="absolute inset-0 bg-gradient-to-b from-white/5 via-white/20 to-[#FFF9F9]/90 z-10" />
@@ -140,15 +168,15 @@ export default function Home() {
           variants={staggerContainer}
           initial="initial"
           animate="animate"
-          className="relative z-20 text-center max-w-4xl px-6 flex flex-col items-center justify-center space-y-5 mt-16 sm:mt-28"
+          className="relative z-20 text-center max-w-4xl px-6 flex flex-col items-center justify-center space-y-4 sm:space-y-5 mt-12 sm:mt-28"
         >
           {/* Spacer to preserve space where the logo was */}
-          <div className="w-20 h-20 sm:w-56 sm:h-56 mb-2 sm:mb-4 pointer-events-none" />
+          <div className="h-[25vh] sm:h-56 sm:w-56 mb-2 sm:mb-4 pointer-events-none" />
 
           {/* Group Title */}
           <motion.h1
             variants={fadeInUp}
-            className="font-serif text-5xl sm:text-7xl font-bold tracking-tight"
+            className="font-serif text-4xl sm:text-7xl font-bold tracking-tight"
             style={{
               color: '#c60001',
               textShadow: '0 0 60px rgba(255,255,255,1), 0 0 30px rgba(255,255,255,1), 0 0 100px rgba(255,255,255,0.8), 0 4px 30px rgba(255,255,255,0.9)',
@@ -160,7 +188,7 @@ export default function Home() {
           {/* Subtitle / Tagline */}
           <motion.p
             variants={fadeInUp}
-            className="text-text-secondary text-base sm:text-xl font-medium tracking-[0.15em] uppercase max-w-2xl leading-relaxed"
+            className="text-text-secondary text-sm sm:text-xl font-medium tracking-[0.15em] uppercase max-w-2xl leading-relaxed"
             style={{ textShadow: '0 0 50px rgba(255,255,255,1), 0 0 20px rgba(255,255,255,1), 0 4px 20px rgba(255,255,255,0.9)' }}
           >
             Echos of Divinity
@@ -168,20 +196,20 @@ export default function Home() {
 
           <motion.p
             variants={fadeInUp}
-            className="text-sm sm:text-base max-w-lg leading-relaxed font-light"
+            className="text-xs sm:text-base max-w-lg leading-relaxed font-light"
             style={{ color: '#111111' }}
           >
            Holding Our Carnatic Heritage With Pride, Inspiring Generations Through The Timeless Language Of Music.
           </motion.p>
 
           {/* Animated Start Button */}
-          <motion.div variants={fadeInUp} className="pt-4">
+          <motion.div variants={fadeInUp} className="pt-2 sm:pt-4">
             <Link
               href="/vision"
-              className="px-8 py-4 rounded-full bg-primary hover:bg-primary-hover text-white text-xs font-semibold uppercase tracking-widest glow-button flex items-center space-x-2 transition-transform duration-300 hover:scale-105"
+              className="px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-primary hover:bg-primary-hover text-white text-[10px] sm:text-xs font-semibold uppercase tracking-widest glow-button flex items-center space-x-2 transition-transform duration-300 hover:scale-105"
             >
               <span>Start Experience</span>
-              <Play className="w-4 h-4 fill-white" />
+              <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-white" />
             </Link>
           </motion.div>
         </motion.div>
@@ -195,14 +223,14 @@ export default function Home() {
             repeatType: 'reverse',
             duration: 1.2,
           }}
-          className="absolute bottom-10 z-20 flex flex-col items-center cursor-pointer"
+          className="absolute bottom-6 sm:bottom-10 z-20 flex flex-col items-center cursor-pointer"
           onClick={() => {
             const nextSec = document.getElementById('about-teaser');
             nextSec?.scrollIntoView({ behavior: 'smooth' });
           }}
         >
           <span className="text-[10px] tracking-[0.3em] uppercase text-text-secondary mb-2">Scroll Down</span>
-          <div className="w-[1px] h-12 bg-primary/40" />
+          <div className="w-[1px] h-6 sm:h-12 bg-primary/40" />
         </motion.div>
       </section>
 
