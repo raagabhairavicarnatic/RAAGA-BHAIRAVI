@@ -59,7 +59,7 @@ export default function Home() {
             className="font-serif text-5xl sm:text-7xl font-bold tracking-tight"
             style={{
               color: '#c60001',
-              textShadow: '0 0 40px rgba(255,255,255,0.95), 0 2px 20px rgba(255,255,255,0.8), 0 0 80px rgba(255,255,255,0.5)',
+              textShadow: '0 0 60px rgba(255,255,255,1), 0 0 30px rgba(255,255,255,1), 0 0 100px rgba(255,255,255,0.8), 0 4px 30px rgba(255,255,255,0.9)',
             }}
           >
             RAAGA BHAIRAVI
@@ -69,7 +69,7 @@ export default function Home() {
           <motion.p
             variants={fadeInUp}
             className="text-text-secondary text-base sm:text-xl font-medium tracking-[0.15em] uppercase max-w-2xl leading-relaxed"
-            style={{ textShadow: '0 0 30px rgba(255,255,255,0.95), 0 2px 12px rgba(255,255,255,0.75)' }}
+            style={{ textShadow: '0 0 50px rgba(255,255,255,1), 0 0 20px rgba(255,255,255,1), 0 4px 20px rgba(255,255,255,0.9)' }}
           >
             Echos of Divinity
           </motion.p>
@@ -77,7 +77,7 @@ export default function Home() {
           <motion.p
             variants={fadeInUp}
             className="text-text-light text-sm sm:text-base max-w-lg leading-relaxed font-light"
-            style={{ textShadow: '0 0 25px rgba(255,255,255,0.95), 0 2px 10px rgba(255,255,255,0.65)' }}
+            style={{ textShadow: '0 0 40px rgba(255,255,255,1), 0 0 18px rgba(255,255,255,1), 0 4px 15px rgba(255,255,255,0.85)' }}
           >
             Experience premium Carnatic fusion and majestic orchestration.
           </motion.p>
