@@ -67,14 +67,14 @@ export default function Home() {
             variants={fadeInUp}
             className="text-text-secondary text-base sm:text-xl font-medium tracking-[0.15em] uppercase max-w-2xl leading-relaxed"
           >
-            Symphony of Classical Majesty & Contemporary Elegance
+            Echos of Divinity
           </motion.p>
 
           <motion.p
             variants={fadeInUp}
             className="text-text-light text-sm sm:text-base max-w-lg leading-relaxed font-light"
           >
-            Experience premium Carnatic fusion, majestic orchestration, and artistic luxury music curation.
+            Experience premium Carnatic fusion and  majestic orchestration.
           </motion.p>
 
           {/* Animated Start Button */}
