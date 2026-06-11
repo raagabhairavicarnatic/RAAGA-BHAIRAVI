@@ -97,8 +97,8 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <span className="block font-semibold text-foreground">Phone &amp; WhatsApp</span>
-                  <a href="tel:+1234567890" className="text-text-secondary hover:text-primary transition-colors">
-                    +1 (234) 567-890
+                  <a href="tel:+917358689256" className="text-text-secondary hover:text-primary transition-colors">
+                   +91 7358689256 
                   </a>
                 </div>
               </div>
@@ -109,8 +109,8 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <span className="block font-semibold text-foreground">Email Inquiries</span>
-                  <a href="mailto:booking@raagabhairavi.com" className="text-text-secondary hover:text-primary transition-colors">
-                    booking@raagabhairavi.com
+                  <a href="mailto:raagabhairavi.carnatic@gmail.com" className="text-text-secondary hover:text-primary transition-colors">
+                   raagabhairavi.carnatic@gmail.com 
                   </a>
                 </div>
               </div>
@@ -120,8 +120,8 @@ export default function ContactPage() {
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="block font-semibold text-foreground">Creative Studio</span>
-                  <span className="text-text-secondary">Chennai, Tamil Nadu, India</span>
+                  <span className="block font-semibold text-foreground">Location</span>
+                  <span className="text-text-secondary">Tiruvottiyur,Chennai,Tamil Nadu</span>
                 </div>
               </div>
             </div>
@@ -131,7 +131,7 @@ export default function ContactPage() {
               <span className="block text-xs uppercase tracking-widest text-text-light font-semibold mb-4">Follow Us</span>
               <div className="flex items-center space-x-3">
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/raaga_bhairavi"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-11 h-11 rounded-xl flex items-center justify-center shadow-sm hover:scale-110 transition-transform duration-200"
@@ -140,7 +140,7 @@ export default function ContactPage() {
                   <InstagramIcon />
                 </a>
                 <a
-                  href="https://youtube.com"
+                  href="https://www.youtube.com/@Raagabhairavi.carnatic"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-11 h-11 rounded-xl flex items-center justify-center shadow-sm hover:scale-110 transition-transform duration-200"
@@ -149,7 +149,7 @@ export default function ContactPage() {
                   <YoutubeIcon />
                 </a>
                 <a
-                  href="https://facebook.com"
+                  href="https://www.facebook.com/share/17QaGKCxBf/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-11 h-11 rounded-xl flex items-center justify-center shadow-sm hover:scale-110 transition-transform duration-200"
@@ -158,7 +158,7 @@ export default function ContactPage() {
                   <FacebookIcon />
                 </a>
                 <a
-                  href="https://wa.me/1234567890"
+                  href="https://wa.me/+91 7358689256"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-11 h-11 rounded-xl flex items-center justify-center shadow-sm hover:scale-110 transition-transform duration-200"
