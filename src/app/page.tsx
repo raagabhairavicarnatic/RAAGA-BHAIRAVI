@@ -196,7 +196,7 @@ export default function Home() {
           <h2 className="font-serif text-3xl sm:text-4xl font-bold text-foreground leading-tight">
             Transcending Musical Boundaries Through Pure Artistry
           </h2>
-          <p className="text-text-secondary text-sm sm:text-base leading-relaxed">
+          <p className="text-text-secondary text-sm sm:text-base leading-relaxed text-justify">
             Formed In The Heart Of Carnatic Heritage, RAAGA BHAIRAVI Blends Classical Raga Hierarchies , Orchestral Harmonies, And Experimental Sounds.We Have Had The Privilege Of Performing At Various Concerts In Mutt, Stages, And Temples, Sharing The Beauty Of Carnatic Music With Diverse Audiences.Our Team Comprises Six Enthusiastic Students, United By A Common Love For Music.Together, We Strive To Deliver Soulful And Memorable Performances That Reflect Both Tradition And Creativity
           </p>
           <div className="pt-2">

@@ -94,6 +94,10 @@ export default function AdminVisionPage() {
           <h2 className="font-serif text-xl font-bold text-foreground">Artistic Manifesto Edit</h2>
         </div>
 
+        <div className="bg-primary/5 border border-primary/10 rounded-xl p-4 text-xs text-text-secondary leading-relaxed">
+          <strong>Formatting Tip:</strong> You can make specific words or letters bold on the public page by wrapping them in double asterisks, e.g., <code>**bold text**</code>.
+        </div>
+
         {/* Vision */}
         <div className="space-y-2">
           <label className="text-xs font-bold text-text-secondary uppercase tracking-wider block">The Vision Statement</label>

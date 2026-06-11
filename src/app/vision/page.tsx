@@ -13,15 +13,26 @@ interface VisionData {
 }
 
 const defaultData: VisionData = {
-  vision: 'To curate a luxury classical-contemporary crossover space where Indian raga wisdom meets the global orchestra—enriching souls across generations.',
-  mission: 'Preserve and venerate traditional Carnatic raga hierarchies. Innovate boundary-pushing compositions incorporating global ambient harmonies. Perform in majestic acoustic environments to showcase classical music in premium, luxury audio formats.',
-  story: 'RAAGA BHAIRAVI was established as an elite classical assembly of award-winning vocalists, violinists, and percussionists. Driven by an unwavering passion for acoustic purity, raga depth, and majestic arrangement, the group has performed in global music festivals and world-class concert halls. We believe music is a sacred sensory experiences that should be curated with care, luxury, and artistic reverence.',
+  vision: 'To curate a **luxury classical-contemporary crossover space** where **Indian raga wisdom** meets the **global orchestra**—enriching souls across generations.',
+  mission: '**Preserve and venerate** traditional **Carnatic raga hierarchies**. **Innovate** boundary-pushing compositions incorporating **global ambient harmonies**. **Perform** in majestic acoustic environments to showcase classical music in **premium, luxury audio formats**.',
+  story: '**RAAGA BHAIRAVI** was established as an **elite classical assembly** of award-winning vocalists, violinists, and percussionists. Driven by an **unwavering passion** for **acoustic purity**, **raga depth**, and **majestic arrangement**, the group has performed in global music festivals and world-class concert halls. We believe music is a **sacred sensory experience** that should be curated with care, luxury, and **artistic reverence**.',
 };
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+};
+
+const renderBoldText = (text: string) => {
+  if (!text) return '';
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={index} className="font-bold text-foreground">{part.slice(2, -2)}</strong>;
+    }
+    return part;
+  });
 };
 
 export default function VisionPage() {
@@ -33,10 +44,22 @@ export default function VisionPage() {
     const unsubscribe = onSnapshot(docRef, (docSnap) => {
       if (docSnap.exists()) {
         const firestoreData = docSnap.data();
+
+        // Inject bold markers into legacy database content if they match default patterns
+        const processLegacyValue = (key: keyof VisionData, fbVal: string) => {
+          const fsVal = firestoreData[key] || '';
+          if (!fsVal) return fbVal;
+          const legacyText = fbVal.replace(/\*\*/g, '');
+          if (fsVal === legacyText) {
+            return fbVal;
+          }
+          return fsVal;
+        };
+
         setData({
-          vision: firestoreData.vision || defaultData.vision,
-          mission: firestoreData.mission || defaultData.mission,
-          story: firestoreData.story || defaultData.story,
+          vision: processLegacyValue('vision', defaultData.vision),
+          mission: processLegacyValue('mission', defaultData.mission),
+          story: processLegacyValue('story', defaultData.story),
         });
       }
     });
@@ -81,8 +104,8 @@ export default function VisionPage() {
               <Compass className="w-6 h-6" />
             </div>
             <h2 className="font-serif text-2xl font-bold text-foreground">The Vision</h2>
-            <p className="text-text-secondary text-sm leading-relaxed whitespace-pre-line">
-              {data.vision}
+            <p className="text-text-secondary text-sm leading-relaxed whitespace-pre-line text-justify">
+              {renderBoldText(data.vision)}
             </p>
           </motion.div>
 
@@ -98,8 +121,8 @@ export default function VisionPage() {
               <Target className="w-6 h-6" />
             </div>
             <h2 className="font-serif text-2xl font-bold text-foreground">The Mission</h2>
-            <p className="text-text-secondary text-sm leading-relaxed whitespace-pre-line">
-              {data.mission}
+            <p className="text-text-secondary text-sm leading-relaxed whitespace-pre-line text-justify">
+              {renderBoldText(data.mission)}
             </p>
           </motion.div>
         </div>
@@ -119,8 +142,8 @@ export default function VisionPage() {
             </div>
             <h2 className="font-serif text-3xl font-bold text-foreground">Our Story & Artistic Philosophy</h2>
             <div className="w-12 h-[1px] bg-primary/20" />
-            <p className="text-text-secondary text-sm sm:text-base leading-relaxed max-w-3xl whitespace-pre-line font-light">
-              {data.story}
+            <p className="text-text-secondary text-sm sm:text-base leading-relaxed max-w-3xl whitespace-pre-line font-light text-justify">
+              {renderBoldText(data.story)}
             </p>
           </div>
         </motion.div>
