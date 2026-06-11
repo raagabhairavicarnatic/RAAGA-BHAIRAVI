@@ -79,7 +79,7 @@ export default function Home() {
             className="text-sm sm:text-base max-w-lg leading-relaxed font-light"
             style={{ color: '#1a1a1a' }}
           >
-            Experience premium Carnatic fusion and majestic orchestration.
+           Holding Our Carnatic Heritage With Pride, Inspiring Generations Through The Timeless Language Of Music.
           </motion.p>
 
           {/* Animated Start Button */}
