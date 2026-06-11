@@ -57,7 +57,10 @@ export default function Home() {
           <motion.h1
             variants={fadeInUp}
             className="font-serif text-5xl sm:text-7xl font-bold tracking-tight"
-            style={{ color: '#c60001' }}
+            style={{
+              color: '#c60001',
+              textShadow: '0 0 40px rgba(255,255,255,0.95), 0 2px 20px rgba(255,255,255,0.8), 0 0 80px rgba(255,255,255,0.5)',
+            }}
           >
             RAAGA BHAIRAVI
           </motion.h1>
@@ -66,6 +69,7 @@ export default function Home() {
           <motion.p
             variants={fadeInUp}
             className="text-text-secondary text-base sm:text-xl font-medium tracking-[0.15em] uppercase max-w-2xl leading-relaxed"
+            style={{ textShadow: '0 0 30px rgba(255,255,255,0.95), 0 2px 12px rgba(255,255,255,0.75)' }}
           >
             Echos of Divinity
           </motion.p>
@@ -73,8 +77,9 @@ export default function Home() {
           <motion.p
             variants={fadeInUp}
             className="text-text-light text-sm sm:text-base max-w-lg leading-relaxed font-light"
+            style={{ textShadow: '0 0 25px rgba(255,255,255,0.95), 0 2px 10px rgba(255,255,255,0.65)' }}
           >
-            Experience premium Carnatic fusion and  majestic orchestration.
+            Experience premium Carnatic fusion and majestic orchestration.
           </motion.p>
 
           {/* Animated Start Button */}
