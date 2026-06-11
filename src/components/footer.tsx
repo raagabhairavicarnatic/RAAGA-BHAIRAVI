@@ -175,12 +175,7 @@ export default function Footer() {
           <Link href="/admin-login" className="hover:text-primary transition-colors">
             Admin Portal
           </Link>
-          <a href="#" className="hover:text-primary transition-colors">
-            Privacy Policy
-          </a>
-          <a href="#" className="hover:text-primary transition-colors">
-            Terms of Use
-          </a>
+          
         </div>
       </div>
     </footer>
