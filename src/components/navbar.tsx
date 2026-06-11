@@ -83,7 +83,8 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="relative text-sm font-medium tracking-wide transition-colors py-1 text-text-secondary hover:text-primary"
+                  className="relative text-sm font-semibold tracking-wide transition-colors py-1 hover:text-primary"
+                  style={{ color: isActive ? undefined : '#111111' }}
                 >
                   {link.label}
                   {isActive && (
@@ -126,8 +127,8 @@ export default function Navbar() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`text-xl font-medium tracking-wide transition-colors ${
-                      isActive ? 'text-primary' : 'text-text-secondary'
+                    className={`text-xl font-semibold tracking-wide transition-colors ${
+                      isActive ? 'text-primary' : 'text-[#111111]'
                     } hover:text-primary`}
                   >
                     {link.label}
