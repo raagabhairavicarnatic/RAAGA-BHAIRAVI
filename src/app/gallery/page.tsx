@@ -28,6 +28,17 @@ export default function GalleryPage() {
   const [items, setItems] = useState<GalleryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const [activeFilter, setActiveFilter] = useState<'all' | 'image' | 'youtube'>('all');
+
+  const filteredItems = activeFilter === 'all'
+    ? items
+    : items.filter((item) => item.type === activeFilter);
+
+  const filters: { key: 'all' | 'image' | 'youtube'; label: string }[] = [
+    { key: 'all', label: 'All' },
+    { key: 'youtube', label: 'YouTube' },
+    { key: 'image', label: 'Photos' },
+  ];
 
   useEffect(() => {
     const q = query(collection(db, 'gallery'), orderBy('createdAt', 'desc'));
@@ -77,6 +88,30 @@ export default function GalleryPage() {
             Browse through concert highlights, high-resolution performance photos, and YouTube concert records.
           </p>
           <div className="w-24 h-[1px] bg-primary/30 mx-auto mt-6" />
+
+          {/* Filter Tabs */}
+          <div className="flex items-center justify-center gap-2 pt-4">
+            {filters.map((f) => (
+              <button
+                key={f.key}
+                onClick={() => setActiveFilter(f.key)}
+                className={`relative px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.15em] rounded-full transition-all duration-300 ${
+                  activeFilter === f.key
+                    ? 'bg-primary text-white shadow-md shadow-primary/25'
+                    : 'bg-white/60 text-text-secondary hover:bg-white hover:text-foreground border border-primary/10'
+                }`}
+              >
+                {f.label}
+                {activeFilter === f.key && (
+                  <motion.span
+                    layoutId="galleryFilterPill"
+                    className="absolute inset-0 bg-primary rounded-full -z-10"
+                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                  />
+                )}
+              </button>
+            ))}
+          </div>
         </motion.div>
 
         {/* Masonry / Pinterest Grid */}
@@ -86,13 +121,15 @@ export default function GalleryPage() {
           </div>
         ) : (
           <div className="max-w-6xl mx-auto">
-            {items.length === 0 ? (
+            {filteredItems.length === 0 ? (
               <div className="glass-panel p-16 rounded-3xl text-center text-text-secondary text-sm border border-primary/5">
-                No gallery items uploaded yet. Please check back later.
+                {items.length === 0
+                  ? 'No gallery items uploaded yet. Please check back later.'
+                  : `No ${activeFilter === 'youtube' ? 'YouTube videos' : 'photos'} found.`}
               </div>
             ) : (
               <div className="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6">
-                {items.map((item) => (
+                {filteredItems.map((item) => (
                   <motion.div
                     key={item.id}
                     initial={{ opacity: 0, scale: 0.95 }}
