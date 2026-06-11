@@ -76,8 +76,8 @@ export default function Home() {
 
           <motion.p
             variants={fadeInUp}
-            className="text-text-light text-sm sm:text-base max-w-lg leading-relaxed font-light"
-            style={{ textShadow: '0 0 40px rgba(255,255,255,1), 0 0 18px rgba(255,255,255,1), 0 4px 15px rgba(255,255,255,0.85)' }}
+            className="text-sm sm:text-base max-w-lg leading-relaxed font-light"
+            style={{ color: '#1a1a1a' }}
           >
             Experience premium Carnatic fusion and majestic orchestration.
           </motion.p>
