@@ -1,59 +1,50 @@
 'use client';
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { db } from '@/lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { Phone, Mail, MapPin, CheckCircle, Send, MessageSquare } from 'lucide-react';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Phone, Mail, MapPin } from 'lucide-react';
 
-const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg
-    viewBox="0 0 24 24"
-    width="24"
-    height="24"
-    stroke="currentColor"
-    strokeWidth="2"
-    fill="none"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+const InstagramIcon = () => (
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="ig-grad" cx="30%" cy="107%" r="150%">
+        <stop offset="0%" stopColor="#fdf497" />
+        <stop offset="5%" stopColor="#fdf497" />
+        <stop offset="45%" stopColor="#fd5949" />
+        <stop offset="60%" stopColor="#d6249f" />
+        <stop offset="90%" stopColor="#285AEB" />
+      </radialGradient>
+    </defs>
+    <rect x="2" y="2" width="20" height="20" rx="5" fill="url(#ig-grad)" />
+    <circle cx="12" cy="12" r="4" stroke="white" strokeWidth="1.8" fill="none" />
+    <circle cx="17.5" cy="6.5" r="1.2" fill="white" />
   </svg>
 );
 
-const FacebookIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg
-    viewBox="0 0 24 24"
-    width="24"
-    height="24"
-    stroke="currentColor"
-    strokeWidth="2"
-    fill="none"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+const FacebookIcon = () => (
+  <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+    <rect width="24" height="24" rx="5" fill="#1877F2" />
+    <path
+      d="M15.5 8H13.5C13.2 8 13 8.2 13 8.5V10H15.5L15.2 12.5H13V19H10.5V12.5H9V10H10.5V8.5C10.5 6.6 11.8 5.5 13.5 5.5H15.5V8Z"
+      fill="white"
+    />
   </svg>
 );
 
-const YoutubeIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg
-    viewBox="0 0 24 24"
-    width="24"
-    height="24"
-    stroke="currentColor"
-    strokeWidth="2"
-    fill="none"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" />
-    <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
+const YoutubeIcon = () => (
+  <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+    <rect width="24" height="24" rx="5" fill="#FF0000" />
+    <polygon points="10.2,14.8 14.8,12 10.2,9.2" fill="white" />
+  </svg>
+);
+
+const WhatsAppIcon = () => (
+  <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+    <rect width="24" height="24" rx="5" fill="#25D366" />
+    <path
+      d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884"
+      fill="white"
+    />
   </svg>
 );
 
@@ -64,69 +55,9 @@ const fadeInUp = {
 };
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    eventType: '',
-    date: '',
-    location: '',
-    message: '',
-  });
-
-  const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-
-    try {
-      await addDoc(collection(db, 'bookings'), {
-        ...formData,
-        timestamp: serverTimestamp(),
-      });
-      setSuccess(true);
-      setFormData({
-        name: '',
-        phone: '',
-        eventType: '',
-        date: '',
-        location: '',
-        message: '',
-      });
-    } catch (error) {
-      console.error('Error submitting booking inquiry:', error);
-      alert('Something went wrong. Please try again.');
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   return (
     <div className="bg-[#FFF9F9] min-h-screen pt-32 pb-24 px-6 relative">
-      {/* 1. Floating WhatsApp Button (Bottom Left) */}
-      <a
-        href="https://wa.me/1234567890?text=Hello%20Raaga%20Bhairavi,%20I%20would%20like%20to%20inquire%20about%20booking%20a%20performance!"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-6 left-6 z-50 w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-white flex items-center justify-center shadow-lg transition-transform duration-300 hover:scale-105"
-        title="Chat on WhatsApp"
-      >
-        <MessageSquare className="w-6 h-6 fill-white" />
-        <span className="absolute -top-1 -right-1 flex h-3 w-3">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-3 w-3 bg-[#25D366]"></span>
-        </span>
-      </a>
-
-      <div className="max-w-7xl mx-auto space-y-16">
+      <div className="max-w-5xl mx-auto space-y-16">
         {/* Header */}
         <motion.div
           initial="initial"
@@ -147,236 +78,110 @@ export default function ContactPage() {
           <div className="w-24 h-[1px] bg-primary/30 mx-auto mt-6" />
         </motion.div>
 
-        {/* Contact Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Info Card - Left (Col Span 5) */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="lg:col-span-5 space-y-6"
-          >
-            {/* Main info card */}
-            <div className="glass-panel p-8 rounded-3xl space-y-8 shadow-sm">
-              <h2 className="font-serif text-2xl font-bold text-foreground">Get In Touch</h2>
-              
-              <div className="space-y-6 text-sm">
-                <div className="flex items-start space-x-4">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
-                    <Phone className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="block font-semibold text-foreground">Phone & WhatsApp</span>
-                    <a href="tel:+1234567890" className="text-text-secondary hover:text-primary transition-colors">
-                      +1 (234) 567-890
-                    </a>
-                  </div>
-                </div>
+        {/* Contact Info + Map */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start"
+        >
+          {/* Main info card */}
+          <div className="glass-panel p-8 rounded-3xl space-y-8 shadow-sm">
+            <h2 className="font-serif text-2xl font-bold text-foreground">Get In Touch</h2>
 
-                <div className="flex items-start space-x-4">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
-                    <Mail className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="block font-semibold text-foreground">Email Inquiries</span>
-                    <a href="mailto:booking@raagabhairavi.com" className="text-text-secondary hover:text-primary transition-colors">
-                      booking@raagabhairavi.com
-                    </a>
-                  </div>
+            <div className="space-y-6 text-sm">
+              <div className="flex items-start space-x-4">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+                  <Phone className="w-5 h-5" />
                 </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
-                    <MapPin className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="block font-semibold text-foreground">Creative Studio</span>
-                    <span className="text-text-secondary">Chennai, Tamil Nadu, India</span>
-                  </div>
+                <div>
+                  <span className="block font-semibold text-foreground">Phone &amp; WhatsApp</span>
+                  <a href="tel:+1234567890" className="text-text-secondary hover:text-primary transition-colors">
+                    +1 (234) 567-890
+                  </a>
                 </div>
               </div>
 
-              {/* Social Channels */}
-              <div className="border-t border-primary/5 pt-6">
-                <span className="block text-xs uppercase tracking-widest text-text-light font-semibold mb-4">Follow Us</span>
-                <div className="flex items-center space-x-4">
-                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-[#FFF9F9] flex items-center justify-center text-text-secondary hover:bg-primary hover:text-white transition-colors">
-                    <InstagramIcon className="w-4 h-4" />
+              <div className="flex items-start space-x-4">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+                  <Mail className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="block font-semibold text-foreground">Email Inquiries</span>
+                  <a href="mailto:booking@raagabhairavi.com" className="text-text-secondary hover:text-primary transition-colors">
+                    booking@raagabhairavi.com
                   </a>
-                  <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-[#FFF9F9] flex items-center justify-center text-text-secondary hover:bg-primary hover:text-white transition-colors">
-                    <YoutubeIcon className="w-4 h-4" />
-                  </a>
-                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-[#FFF9F9] flex items-center justify-center text-text-secondary hover:bg-primary hover:text-white transition-colors">
-                    <FacebookIcon className="w-4 h-4" />
-                  </a>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div>
+                  <span className="block font-semibold text-foreground">Creative Studio</span>
+                  <span className="text-text-secondary">Chennai, Tamil Nadu, India</span>
                 </div>
               </div>
             </div>
 
-            {/* Google Map Card */}
-            <div className="glass-panel p-3 rounded-3xl overflow-hidden shadow-sm h-64">
-              <iframe
-                title="Studio Location Map"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.8520807833075!2d80.24503737593181!3d13.045051713286086!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a526644f5358055%3A0xb3ea219dc7d19760!2sT.%20Nagar%2C%20Chennai%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
-                className="w-full h-full rounded-2xl border-0"
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
+            {/* Social Channels */}
+            <div className="border-t border-primary/5 pt-6">
+              <span className="block text-xs uppercase tracking-widest text-text-light font-semibold mb-4">Follow Us</span>
+              <div className="flex items-center space-x-3">
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-11 h-11 rounded-xl flex items-center justify-center shadow-sm hover:scale-110 transition-transform duration-200"
+                  title="Instagram"
+                >
+                  <InstagramIcon />
+                </a>
+                <a
+                  href="https://youtube.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-11 h-11 rounded-xl flex items-center justify-center shadow-sm hover:scale-110 transition-transform duration-200"
+                  title="YouTube"
+                >
+                  <YoutubeIcon />
+                </a>
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-11 h-11 rounded-xl flex items-center justify-center shadow-sm hover:scale-110 transition-transform duration-200"
+                  title="Facebook"
+                >
+                  <FacebookIcon />
+                </a>
+                <a
+                  href="https://wa.me/1234567890"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-11 h-11 rounded-xl flex items-center justify-center shadow-sm hover:scale-110 transition-transform duration-200"
+                  title="WhatsApp"
+                >
+                  <WhatsAppIcon />
+                </a>
+              </div>
             </div>
-          </motion.div>
+          </div>
 
-          {/* Booking Form - Right (Col Span 7) */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="lg:col-span-7 glass-panel p-8 rounded-3xl shadow-sm border border-primary/5"
-          >
-            <AnimatePresence mode="wait">
-              {success ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  className="flex flex-col items-center justify-center text-center py-12 space-y-4"
-                >
-                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary animate-bounce">
-                    <CheckCircle className="w-8 h-8" />
-                  </div>
-                  <h2 className="font-serif text-2xl font-bold text-foreground">Inquiry Sent Successfully</h2>
-                  <p className="text-sm text-text-secondary max-w-sm">
-                    Thank you for your interest. Our management team will review your booking details and get back to you shortly.
-                  </p>
-                  <button
-                    onClick={() => setSuccess(false)}
-                    className="mt-6 px-6 py-2.5 rounded-full border border-primary/20 text-xs font-semibold uppercase tracking-wider text-primary hover:bg-primary hover:text-white transition-colors"
-                  >
-                    Send Another Inquiry
-                  </button>
-                </motion.div>
-              ) : (
-                <motion.form
-                  key="booking-form"
-                  onSubmit={handleSubmit}
-                  className="space-y-6"
-                >
-                  <h2 className="font-serif text-2xl font-bold text-foreground mb-4">Performance Inquiry Form</h2>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {/* Name */}
-                    <div className="space-y-2">
-                      <label htmlFor="name" className="text-xs font-semibold text-text-secondary">Your Name / Organization</label>
-                      <input
-                        type="text"
-                        name="name"
-                        id="name"
-                        required
-                        value={formData.name}
-                        onChange={handleChange}
-                        className="w-full bg-white border border-primary/10 focus:border-primary rounded-xl px-4 py-3 text-sm focus:outline-none text-foreground"
-                        placeholder="e.g. Arvind"
-                      />
-                    </div>
-
-                    {/* Phone */}
-                    <div className="space-y-2">
-                      <label htmlFor="phone" className="text-xs font-semibold text-text-secondary">Phone Number</label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        id="phone"
-                        required
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className="w-full bg-white border border-primary/10 focus:border-primary rounded-xl px-4 py-3 text-sm focus:outline-none text-foreground"
-                        placeholder="e.g. +91 98765 43210"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {/* Event Type */}
-                    <div className="space-y-2">
-                      <label htmlFor="eventType" className="text-xs font-semibold text-text-secondary">Event Type</label>
-                      <select
-                        name="eventType"
-                        id="eventType"
-                        required
-                        value={formData.eventType}
-                        onChange={handleChange}
-                        className="w-full bg-white border border-primary/10 focus:border-primary rounded-xl px-4 py-3 text-sm focus:outline-none text-foreground"
-                      >
-                        <option value="">Select Event Type</option>
-                        <option value="Concert">Grand Concert / Tour</option>
-                        <option value="Festival">Music Festival</option>
-                        <option value="Wedding">Wedding / Classical Reception</option>
-                        <option value="Corporate">Corporate Gala</option>
-                        <option value="Other">Other Performance</option>
-                      </select>
-                    </div>
-
-                    {/* Date */}
-                    <div className="space-y-2">
-                      <label htmlFor="date" className="text-xs font-semibold text-text-secondary">Proposed Date</label>
-                      <input
-                        type="date"
-                        name="date"
-                        id="date"
-                        required
-                        value={formData.date}
-                        onChange={handleChange}
-                        className="w-full bg-white border border-primary/10 focus:border-primary rounded-xl px-4 py-3 text-sm focus:outline-none text-foreground"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Location */}
-                  <div className="space-y-2">
-                    <label htmlFor="location" className="text-xs font-semibold text-text-secondary">Venue Location</label>
-                    <input
-                      type="text"
-                      name="location"
-                      id="location"
-                      required
-                      value={formData.location}
-                      onChange={handleChange}
-                      className="w-full bg-white border border-primary/10 focus:border-primary rounded-xl px-4 py-3 text-sm focus:outline-none text-foreground"
-                      placeholder="e.g. Chennai Music Academy, India"
-                    />
-                  </div>
-
-                  {/* Message */}
-                  <div className="space-y-2">
-                    <label htmlFor="message" className="text-xs font-semibold text-text-secondary">Inquiry Description / Message</label>
-                    <textarea
-                      name="message"
-                      id="message"
-                      rows={4}
-                      required
-                      value={formData.message}
-                      onChange={handleChange}
-                      className="w-full bg-white border border-primary/10 focus:border-primary rounded-xl px-4 py-3 text-sm focus:outline-none text-foreground resize-none"
-                      placeholder="Tell us about the audience capacity, acoustic settings, and expected set duration..."
-                    />
-                  </div>
-
-                  {/* Submit Button */}
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="w-full py-4 rounded-xl bg-primary hover:bg-primary-hover text-white text-xs font-bold uppercase tracking-widest glow-button transition-colors flex items-center justify-center space-x-2"
-                  >
-                    <span>{submitting ? 'Sending inquiry...' : 'Send Inquiry'}</span>
-                    <Send className="w-4 h-4" />
-                  </button>
-                </motion.form>
-              )}
-            </AnimatePresence>
-          </motion.div>
-        </div>
+          {/* Google Map Card */}
+          <div className="glass-panel p-3 rounded-3xl overflow-hidden shadow-sm h-full min-h-[350px]">
+            <iframe
+              title="Studio Location Map"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.8520807833075!2d80.24503737593181!3d13.045051713286086!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a526644f5358055%3A0xb3ea219dc7d19760!2sT.%20Nagar%2C%20Chennai%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+              className="w-full h-full rounded-2xl border-0"
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </motion.div>
       </div>
     </div>
   );
