@@ -109,8 +109,8 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <span className="block font-semibold text-foreground">Email Inquiries</span>
-                  <a href="mailto:raagabhairavi.carnatic@gmail.com" className="text-text-secondary hover:text-primary transition-colors">
-                   raagabhairavi.carnatic@gmail.com 
+                  <a href="mailto:raagabhairavi.carnatic@gmail.com" className="text-text-secondary hover:text-primary transition-colors break-all sm:break-normal">
+                    raagabhairavi.carnatic@gmail.com
                   </a>
                 </div>
               </div>

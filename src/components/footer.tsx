@@ -157,7 +157,7 @@ export default function Footer() {
             </li>
             <li>
               <span className="block font-semibold text-foreground">Email:</span>
-              <a href="mailto:raagabhairavi.carnatic@gmail.com" className="hover:text-primary transition-colors">
+              <a href="mailto:raagabhairavi.carnatic@gmail.com" className="hover:text-primary transition-colors break-all sm:break-normal">
                 raagabhairavi.carnatic@gmail.com
               </a>
             </li>
