@@ -69,7 +69,7 @@ export default function ShareFloat() {
         {/* Main Floating Share Button */}
         <motion.button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-14 h-14 rounded-full bg-[#c60001] hover:bg-[#a50001] text-white flex items-center justify-center shadow-lg transition-transform duration-300 hover:scale-105 relative z-50 overflow-hidden cursor-pointer"
+          className="w-14 h-14 rounded-full bg-[#FFE6E6] hover:bg-[#ffd1d1] text-[#c60001] flex items-center justify-center shadow-lg transition-transform duration-300 hover:scale-105 relative z-50 overflow-hidden cursor-pointer border border-[#c60001]/10"
           title="Share Website"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
