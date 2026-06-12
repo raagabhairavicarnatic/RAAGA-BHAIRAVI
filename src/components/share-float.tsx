@@ -45,7 +45,7 @@ export default function ShareFloat() {
     },
     {
       name: 'X (Twitter)',
-      url: 'https://twitter.com/intent/tweet?url=https://raaga-bhairavi.vercel.app/&text=Check%20out%20RAAGA%20BHAIRAVI%20-%20Premium%20Carnatic%20Musical%20Group',
+      url: 'https://twitter.com/intent/tweet?url=https://raaga-bhairavi.vercel.app/&text=Check%20out%20RAAGA%20BHAIRAVI%20-%20Echos%20of%20Divinity%20-%20A%20Carnatic%20Musical%20Group',
       color: '#000000',
       icon: (
         <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
