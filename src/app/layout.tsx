@@ -4,6 +4,7 @@ import './globals.css';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
 import WhatsAppFloat from '@/components/whatsapp-float';
+import ShareFloat from '@/components/share-float';
 import LoadingScreen from '@/components/loading-screen';
 
 const playfair = Playfair_Display({
@@ -66,6 +67,9 @@ export default function RootLayout({
 
         {/* Main page content area */}
         <main className="flex-1 w-full">{children}</main>
+
+        {/* Floating Share Button */}
+        <ShareFloat />
 
         {/* Floating WhatsApp Button */}
         <WhatsAppFloat />
