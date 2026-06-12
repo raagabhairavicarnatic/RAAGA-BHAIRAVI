@@ -28,7 +28,7 @@ export default function WhatsAppFloat() {
       />
 
       <motion.a
-        href="https://wa.me/+917358689256?text=Hello%20Raaga%20Bhairavi,%20I%20would%20like%20to%20inquire%20about%20booking%20a%20performance!"
+        href="https://wa.me/+917358689256?text=Hello%20TEAM%20RAAGA%20BHAIRAVI,%20I%20would%20like%20to%20inquire%20about%20booking%20a%20performance!"
         target="_blank"
         rel="noopener noreferrer"
         className="relative z-10 w-14 h-14 rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-white flex items-center justify-center shadow-lg transition-transform duration-300 hover:scale-105 overflow-hidden"
