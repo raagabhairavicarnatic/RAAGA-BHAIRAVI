@@ -25,7 +25,7 @@ export default function ShareFloat() {
   const shareLinks = [
     {
       name: 'WhatsApp',
-      url: 'https://api.whatsapp.com/send?text=Check%20out%20RAAGA%20BHAIRAVI%20-%20Premium%20Carnatic%20Musical%20Group:%20https://raaga-bhairavi.vercel.app/',
+      url: 'https://api.whatsapp.com/send?text=Check%20out%20RAAGA%20BHAIRAVI%20-%20Echos%20of%20Divinity%20-%20A%20Carnatic%20Musical%20Group:%20https://raaga-bhairavi.vercel.app/',
       color: '#25D366',
       icon: (
         <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
