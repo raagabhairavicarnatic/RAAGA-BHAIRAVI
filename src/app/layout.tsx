@@ -34,9 +34,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'RAAGA BHAIRAVI | Premium Modern Cinematic Musical Group',
+  title: 'RAAGA BHAIRAVI | Echos of Divinity',
   description:
-    'Welcome to the official platform of RAAGA BHAIRAVI. Experience classical, contemporary, and fusion carnatic performances rendered in minimalist luxury and cinematic grandeur.',
+    'Welcome to the official platform of RAAGA BHAIRAVI. Experience Divinity through Artistic music, contemporary, and fusion carnatic performances.',
   keywords: [
     'Raaga Bhairavi',
     'Carnatic Music Group',
