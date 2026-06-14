@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { db } from '@/lib/firebase';
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
@@ -130,12 +129,11 @@ export default function PerformancesPage() {
                     {/* Performance Media Showcase */}
                     <div className="w-full lg:w-[45%] aspect-[4/3] rounded-3xl overflow-hidden glass-panel p-3 relative group">
                       <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-md">
-                        <Image
+                        <img
                           src={perf.images[0] || 'https://images.pexels.com/photos/164743/pexels-photo-164743.jpeg?auto=compress&cs=tinysrgb&w=800'}
                           alt={perf.title}
-                          fill
-                          className="object-cover transition-transform duration-700 group-hover:scale-105"
-                          sizes="(max-w-768px) 100vw, 500px"
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          loading="lazy"
                         />
                       </div>
                     </div>

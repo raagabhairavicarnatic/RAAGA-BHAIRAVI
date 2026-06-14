@@ -318,12 +318,11 @@ export default function Home() {
                   className="glass-panel p-4 rounded-2xl flex flex-col space-y-4 hover:shadow-lg transition-shadow"
                 >
                   <div className="relative h-64 rounded-xl overflow-hidden shadow-sm bg-primary/5">
-                    <Image
+                    <img
                       src={perf.images?.[0] || 'https://images.pexels.com/photos/164743/pexels-photo-164743.jpeg?auto=compress&cs=tinysrgb&w=800'}
                       alt={perf.title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-w-768px) 100vw, 500px"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
                     />
                   </div>
                   <div className="space-y-2">
@@ -379,12 +378,11 @@ export default function Home() {
         ) : latestEvent ? (
           <div className="glass-panel p-6 rounded-2xl flex flex-col md:flex-row items-center gap-8 shadow-sm">
             <div className="relative w-full md:w-48 h-48 rounded-xl overflow-hidden flex-shrink-0 bg-primary/5">
-              <Image
+              <img
                 src={latestEvent.imageUrl || "https://images.pexels.com/photos/167636/pexels-photo-167636.jpeg?auto=compress&cs=tinysrgb&w=800"}
                 alt={latestEvent.title}
-                fill
-                className="object-cover"
-                sizes="(max-w-768px) 100vw, 192px"
+                className="w-full h-full object-cover"
+                loading="lazy"
               />
             </div>
             <div className="flex-1 space-y-4 w-full text-center md:text-left">

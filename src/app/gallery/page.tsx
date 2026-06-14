@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { db } from '@/lib/firebase';
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
@@ -163,15 +162,13 @@ export default function GalleryPage() {
                           <Pin className="w-3.5 h-3.5 fill-current" />
                         </div>
                       )}
-                      {/* Next Image Optimized Lazy Loading */}
+                      {/* Image Loading */}
                       <div className="relative w-full h-auto overflow-hidden rounded-lg">
-                        <Image
+                        <img
                           src={item.imageUrl}
                           alt={item.title}
-                          width={450}
-                          height={350}
                           className="w-full h-auto object-cover rounded-lg transition-transform duration-700 group-hover:scale-105"
-                          sizes="(max-w-768px) 100vw, (max-w-1200px) 50vw, 33vw"
+                          loading="lazy"
                         />
                       </div>
 
@@ -216,14 +213,6 @@ export default function GalleryPage() {
             onClick={() => setActiveItem(null)}
             className="fixed inset-0 z-50 bg-white/95 backdrop-blur-md flex items-center justify-center p-4 md:p-6"
           >
-            {/* Top Right Close Button on backdrop */}
-            <button
-              onClick={() => setActiveItem(null)}
-              className="absolute top-6 right-6 text-text-secondary hover:text-primary transition-colors cursor-pointer z-50 p-2 rounded-full hover:bg-black/5"
-            >
-              <X className="w-8 h-8" />
-            </button>
-
             {/* Modal Container */}
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
@@ -232,8 +221,8 @@ export default function GalleryPage() {
               onClick={(e) => e.stopPropagation()}
               className="relative w-full max-w-4xl max-h-[90vh] md:max-h-[75vh] bg-white rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row border border-primary/10"
             >
-              {/* Left Column: Image Showcase */}
-              <div className="w-full md:w-2/3 bg-white flex items-center justify-center p-6 relative min-h-[260px] md:min-h-[400px]">
+              {/* Left Column: Image Showcase (58%) */}
+              <div className="w-full md:w-[58%] bg-white flex items-center justify-center p-6 relative min-h-[260px] md:min-h-[400px]">
                 <img
                   src={activeItem.imageUrl}
                   alt={activeItem.title}
@@ -241,8 +230,8 @@ export default function GalleryPage() {
                 />
               </div>
 
-              {/* Right Column: Title & Description Content (White Background) */}
-              <div className="w-full md:w-1/3 p-6 md:p-8 flex flex-col justify-between bg-white text-foreground border-t md:border-t-0 md:border-l border-primary/10">
+              {/* Right Column: Title & Description Content (42%) */}
+              <div className="w-full md:w-[42%] p-6 md:p-8 flex flex-col bg-white text-foreground border-t md:border-t-0 md:border-l border-primary/10">
                 <div className="space-y-4 overflow-y-auto max-h-[40vh] md:max-h-full pr-1">
                   <div className="flex items-center justify-between border-b border-primary/10 pb-3">
                     <span className="text-[10px] uppercase tracking-wider text-primary font-bold">
@@ -250,7 +239,7 @@ export default function GalleryPage() {
                     </span>
                     <button
                       onClick={() => setActiveItem(null)}
-                      className="text-text-secondary hover:text-primary transition-colors cursor-pointer"
+                      className="text-text-secondary hover:text-primary transition-colors cursor-pointer p-1 rounded-full hover:bg-black/5"
                     >
                       <X className="w-5 h-5" />
                     </button>
@@ -269,15 +258,6 @@ export default function GalleryPage() {
                       No description provided for this gallery item.
                     </p>
                   )}
-                </div>
-
-                <div className="pt-4 border-t border-primary/10 flex justify-end mt-4">
-                  <button
-                    onClick={() => setActiveItem(null)}
-                    className="px-5 py-2.5 rounded-xl border border-primary/20 hover:border-primary text-xs font-semibold text-text-secondary hover:text-primary transition-colors cursor-pointer"
-                  >
-                    Close
-                  </button>
                 </div>
               </div>
             </motion.div>

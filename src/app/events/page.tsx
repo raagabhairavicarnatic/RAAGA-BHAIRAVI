@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { db } from '@/lib/firebase';
@@ -125,12 +124,11 @@ export default function EventsPage() {
                 >
                   {/* Event Banner */}
                   <div className="relative w-full md:w-56 h-56 rounded-2xl overflow-hidden flex-shrink-0 bg-primary/5 shadow-sm">
-                    <Image
+                    <img
                       src={event.imageUrl}
                       alt={event.title}
-                      fill
-                      className="object-cover transition-transform duration-700 hover:scale-105"
-                      sizes="(max-w-768px) 100vw, 224px"
+                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                      loading="lazy"
                     />
                   </div>
 
