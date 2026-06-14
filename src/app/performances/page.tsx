@@ -128,21 +128,20 @@ export default function PerformancesPage() {
                     }`}
                   >
                     {/* Performance Media Showcase */}
-                    <div className="w-full lg:w-[35%] max-w-[320px] rounded-3xl overflow-hidden glass-panel p-3 relative group mx-auto lg:mx-0">
-                      <div className="relative w-full h-auto overflow-hidden rounded-2xl shadow-md">
+                    <div className="w-full lg:w-[45%] aspect-[4/3] rounded-3xl overflow-hidden glass-panel p-3 relative group">
+                      <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-md">
                         <Image
                           src={perf.images[0] || 'https://images.pexels.com/photos/164743/pexels-photo-164743.jpeg?auto=compress&cs=tinysrgb&w=800'}
                           alt={perf.title}
-                          width={600}
-                          height={450}
-                          className="w-full h-auto object-cover rounded-2xl transition-transform duration-700 group-hover:scale-105"
-                          sizes="(max-w-768px) 100vw, 400px"
+                          fill
+                          className="object-cover transition-transform duration-700 group-hover:scale-105"
+                          sizes="(max-w-768px) 100vw, 500px"
                         />
                       </div>
                     </div>
 
                     {/* Performance Description */}
-                    <div className="w-full lg:w-[65%] space-y-6">
+                    <div className="w-full lg:w-[55%] space-y-6">
                       <div className="space-y-3">
                         <div className="flex flex-wrap items-center gap-4 text-xs text-text-light">
                           <div className="flex items-center space-x-1">

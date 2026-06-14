@@ -300,7 +300,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6">
             {loadingPerf ? (
               <div className="col-span-2 text-center py-12 text-text-secondary text-sm">
                 Loading performances...
@@ -317,14 +317,13 @@ export default function Home() {
                   transition={{ duration: 0.3 }}
                   className="glass-panel p-4 rounded-2xl flex flex-col space-y-4 hover:shadow-lg transition-shadow"
                 >
-                  <div className="relative w-full h-auto rounded-xl overflow-hidden shadow-sm">
+                  <div className="relative h-64 rounded-xl overflow-hidden shadow-sm bg-primary/5">
                     <Image
                       src={perf.images?.[0] || 'https://images.pexels.com/photos/164743/pexels-photo-164743.jpeg?auto=compress&cs=tinysrgb&w=800'}
                       alt={perf.title}
-                      width={600}
-                      height={450}
-                      className="w-full h-auto object-cover rounded-xl transition-transform duration-700 hover:scale-105"
-                      sizes="(max-w-768px) 100vw, 400px"
+                      fill
+                      className="object-cover"
+                      sizes="(max-w-768px) 100vw, 500px"
                     />
                   </div>
                   <div className="space-y-2">
