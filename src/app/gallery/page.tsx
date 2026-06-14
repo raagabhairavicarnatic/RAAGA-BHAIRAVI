@@ -11,6 +11,7 @@ interface GalleryItem {
   id: string;
   type: 'image' | 'youtube';
   title: string;
+  description?: string;
   imageUrl: string;
   youtubeUrl?: string;
   createdAt: number;
@@ -189,13 +190,20 @@ export default function GalleryPage() {
                     </div>
 
                     {/* Info Text */}
-                    <div className="px-2 pb-1 flex items-center justify-between">
-                      <span className="text-xs font-serif font-bold text-foreground truncate max-w-[80%]">
-                        {item.title}
-                      </span>
-                      <span className="text-[9px] uppercase tracking-wider text-text-light flex-shrink-0">
-                        {item.type}
-                      </span>
+                    <div className="px-2 pb-1 space-y-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-xs font-serif font-bold text-foreground truncate flex-1">
+                          {item.title}
+                        </span>
+                        <span className="text-[9px] uppercase tracking-wider text-text-light flex-shrink-0">
+                          {item.type}
+                        </span>
+                      </div>
+                      {item.description && (
+                        <p className="text-[10px] text-text-secondary leading-normal font-light line-clamp-2 text-justify">
+                          {item.description}
+                        </p>
+                      )}
                     </div>
                   </motion.div>
                 ))}

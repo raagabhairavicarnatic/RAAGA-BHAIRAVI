@@ -10,6 +10,7 @@ interface GalleryItem {
   id: string;
   type: 'image' | 'youtube';
   title: string;
+  description?: string;
   imageUrl: string;
   youtubeUrl?: string;
   createdAt: number;
@@ -26,6 +27,7 @@ export default function AdminGalleryPage() {
   const [form, setForm] = useState({
     type: 'image' as 'image' | 'youtube',
     title: '',
+    description: '',
     imageUrl: '', // For manual URL input
     youtubeUrl: '',
     pinned: false,
@@ -43,6 +45,7 @@ export default function AdminGalleryPage() {
           id: docSnap.id,
           type: data.type,
           title: data.title,
+          description: data.description || '',
           imageUrl: data.imageUrl,
           youtubeUrl: data.youtubeUrl || '',
           createdAt: data.createdAt,
@@ -143,10 +146,11 @@ export default function AdminGalleryPage() {
         finalImageUrl = `https://img.youtube.com/vi/${yid}/0.jpg`;
       }
 
-      const adminEmail = auth.currentUser?.email || 'Unknown';
+       const adminEmail = auth.currentUser?.email || 'Unknown';
       const payload = {
         type: form.type,
         title: form.title,
+        description: form.description.trim(),
         imageUrl: finalImageUrl,
         youtubeUrl: form.type === 'youtube' ? form.youtubeUrl.trim() : null,
         updatedAt: Date.now(),
@@ -168,6 +172,7 @@ export default function AdminGalleryPage() {
       setForm({
         type: 'image',
         title: '',
+        description: '',
         imageUrl: '',
         youtubeUrl: '',
         pinned: false,
@@ -188,6 +193,7 @@ export default function AdminGalleryPage() {
     setForm({
       type: 'image',
       title: '',
+      description: '',
       imageUrl: '',
       youtubeUrl: '',
       pinned: false,
@@ -201,6 +207,7 @@ export default function AdminGalleryPage() {
     setForm({
       type: item.type,
       title: item.title,
+      description: item.description || '',
       imageUrl: item.type === 'image' ? item.imageUrl : '',
       youtubeUrl: item.type === 'youtube' ? item.youtubeUrl || '' : '',
       pinned: !!item.pinned,
@@ -273,10 +280,15 @@ export default function AdminGalleryPage() {
               </div>
 
               {/* Info & Actions */}
-              <div className="flex items-center justify-between px-1">
-                <div>
-                  <h4 className="text-xs font-bold text-foreground truncate max-w-[120px]">{item.title}</h4>
-                  <span className="text-[9px] uppercase tracking-wider text-text-light">{item.type}</span>
+              <div className="flex items-start justify-between px-1 gap-2">
+                <div className="space-y-1 min-w-0 flex-1">
+                  <h4 className="text-xs font-bold text-foreground truncate">{item.title}</h4>
+                  {item.description && (
+                    <p className="text-[10px] text-text-secondary line-clamp-1 italic font-light">
+                      {item.description}
+                    </p>
+                  )}
+                  <span className="text-[9px] uppercase tracking-wider text-text-light block">{item.type}</span>
                 </div>
                 <div className="flex items-center space-x-2 flex-shrink-0">
                   <button
@@ -354,6 +366,18 @@ export default function AdminGalleryPage() {
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
                   className="w-full bg-white border border-primary/10 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-primary text-foreground"
                   placeholder="e.g. Classical Concert Highlights"
+                />
+              </div>
+
+              {/* Description (Optional) */}
+              <div className="space-y-1">
+                <label className="text-[10px] uppercase font-bold text-text-secondary">Description (Optional)</label>
+                <textarea
+                  name="description"
+                  value={form.description}
+                  onChange={(e) => setForm({ ...form, description: e.target.value })}
+                  className="w-full bg-white border border-primary/10 rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-primary text-foreground min-h-[60px] resize-y"
+                  placeholder="e.g. Highlights from our live classical performance..."
                 />
               </div>
 
