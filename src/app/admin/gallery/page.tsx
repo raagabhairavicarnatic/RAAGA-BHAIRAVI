@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { db, auth } from '@/lib/firebase';
 import { supabase } from '@/lib/supabase';
 import { collection, onSnapshot, query, orderBy, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
-import { ImageIcon, Plus, Trash2, Edit2, X, Play, Upload } from 'lucide-react';
+import { ImageIcon, Plus, Trash2, Edit2, X, Play, Upload, Pin } from 'lucide-react';
 
 interface GalleryItem {
   id: string;
@@ -13,6 +13,7 @@ interface GalleryItem {
   imageUrl: string;
   youtubeUrl?: string;
   createdAt: number;
+  pinned?: boolean;
 }
 
 export default function AdminGalleryPage() {
@@ -27,6 +28,7 @@ export default function AdminGalleryPage() {
     title: '',
     imageUrl: '', // For manual URL input
     youtubeUrl: '',
+    pinned: false,
   });
   const [uploadFile, setUploadFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -44,7 +46,15 @@ export default function AdminGalleryPage() {
           imageUrl: data.imageUrl,
           youtubeUrl: data.youtubeUrl || '',
           createdAt: data.createdAt,
+          pinned: !!data.pinned,
         });
+      });
+      // Sort client-side: pinned items first, then by createdAt desc
+      dbItems.sort((a, b) => {
+        const aPinned = a.pinned ? 1 : 0;
+        const bPinned = b.pinned ? 1 : 0;
+        if (aPinned !== bPinned) return bPinned - aPinned;
+        return b.createdAt - a.createdAt;
       });
       setItems(dbItems);
       setLoading(false);
@@ -141,6 +151,7 @@ export default function AdminGalleryPage() {
         youtubeUrl: form.type === 'youtube' ? form.youtubeUrl.trim() : null,
         updatedAt: Date.now(),
         updatedBy: adminEmail,
+        pinned: form.pinned,
       };
 
       if (editingItem) {
@@ -159,6 +170,7 @@ export default function AdminGalleryPage() {
         title: '',
         imageUrl: '',
         youtubeUrl: '',
+        pinned: false,
       });
       setUploadFile(null);
       setEditingItem(null);
@@ -178,6 +190,7 @@ export default function AdminGalleryPage() {
       title: '',
       imageUrl: '',
       youtubeUrl: '',
+      pinned: false,
     });
     setUploadFile(null);
     setShowModal(true);
@@ -190,6 +203,7 @@ export default function AdminGalleryPage() {
       title: item.title,
       imageUrl: item.type === 'image' ? item.imageUrl : '',
       youtubeUrl: item.type === 'youtube' ? item.youtubeUrl || '' : '',
+      pinned: !!item.pinned,
     });
     setUploadFile(null);
     setShowModal(true);
@@ -234,6 +248,28 @@ export default function AdminGalleryPage() {
                     <Play className="w-8 h-8 text-white fill-white" />
                   </div>
                 )}
+                {/* Floating Pin Button */}
+                <button
+                  onClick={async () => {
+                    try {
+                      await updateDoc(doc(db, 'gallery', item.id), {
+                        pinned: !item.pinned,
+                        updatedAt: Date.now(),
+                        updatedBy: auth.currentUser?.email || 'Unknown'
+                      });
+                    } catch (err) {
+                      console.error("Error toggling pin status:", err);
+                    }
+                  }}
+                  className={`absolute top-3 right-3 w-8 h-8 rounded-xl flex items-center justify-center shadow-md cursor-pointer transition-all z-10 ${
+                    item.pinned 
+                      ? 'bg-primary text-white scale-105' 
+                      : 'bg-white/90 text-text-secondary border border-primary/10 opacity-0 group-hover:opacity-100 hover:bg-white hover:text-primary'
+                  }`}
+                  title={item.pinned ? "Unpin from Top" : "Pin to Top"}
+                >
+                  <Pin className="w-4 h-4 fill-current" />
+                </button>
               </div>
 
               {/* Info & Actions */}
@@ -376,6 +412,20 @@ export default function AdminGalleryPage() {
                   </span>
                 </div>
               )}
+
+              {/* Pin to Top Checkbox */}
+              <div className="flex items-center space-x-2 pt-1 pb-2">
+                <input
+                  type="checkbox"
+                  id="pinned"
+                  checked={form.pinned}
+                  onChange={(e) => setForm({ ...form, pinned: e.target.checked })}
+                  className="w-4 h-4 accent-primary rounded cursor-pointer"
+                />
+                <label htmlFor="pinned" className="text-xs text-text-secondary font-medium cursor-pointer select-none">
+                  Pin this item to the top
+                </label>
+              </div>
 
               {/* Submit */}
               <button

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { db } from '@/lib/firebase';
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
-import { Image as ImageIcon, Play, X, ZoomIn, Eye } from 'lucide-react';
+import { Image as ImageIcon, Play, X, ZoomIn, Eye, Pin } from 'lucide-react';
 
 interface GalleryItem {
   id: string;
@@ -14,6 +14,7 @@ interface GalleryItem {
   imageUrl: string;
   youtubeUrl?: string;
   createdAt: number;
+  pinned?: boolean;
 }
 
 const defaultGallery: GalleryItem[] = [];
@@ -54,7 +55,15 @@ export default function GalleryPage() {
           imageUrl: data.imageUrl,
           youtubeUrl: data.youtubeUrl,
           createdAt: data.createdAt,
+          pinned: !!data.pinned,
         });
+      });
+      // Client-side sort: pinned items first, then by createdAt desc
+      dbItems.sort((a, b) => {
+        const aPinned = a.pinned ? 1 : 0;
+        const bPinned = b.pinned ? 1 : 0;
+        if (aPinned !== bPinned) return bPinned - aPinned;
+        return b.createdAt - a.createdAt;
       });
       setItems(dbItems.length > 0 ? dbItems : defaultGallery);
       setLoading(false);
@@ -140,6 +149,11 @@ export default function GalleryPage() {
                   >
                     {/* Media frame */}
                     <div className="relative rounded-xl overflow-hidden aspect-[4/3] sm:aspect-auto shadow-sm">
+                      {item.pinned && (
+                        <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm text-[#d4af37] p-2 rounded-xl shadow-md z-20 border border-[#d4af37]/20 flex items-center justify-center" title="Pinned to Top">
+                          <Pin className="w-3.5 h-3.5 fill-current" />
+                        </div>
+                      )}
                       {/* Next Image Optimized Lazy Loading */}
                       <div className="relative w-full h-auto overflow-hidden rounded-lg">
                         <Image
