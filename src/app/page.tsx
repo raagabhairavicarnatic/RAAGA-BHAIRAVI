@@ -317,12 +317,13 @@ export default function Home() {
                   transition={{ duration: 0.3 }}
                   className="glass-panel p-4 rounded-2xl flex flex-col space-y-4 hover:shadow-lg transition-shadow"
                 >
-                  <div className="relative h-64 rounded-xl overflow-hidden shadow-sm bg-primary/5">
+                  <div className="relative w-full h-auto rounded-xl overflow-hidden shadow-sm bg-primary/5">
                     <Image
                       src={perf.images?.[0] || 'https://images.pexels.com/photos/164743/pexels-photo-164743.jpeg?auto=compress&cs=tinysrgb&w=800'}
                       alt={perf.title}
-                      fill
-                      className="object-cover"
+                      width={600}
+                      height={450}
+                      className="w-full h-auto object-cover rounded-xl"
                       sizes="(max-w-768px) 100vw, 500px"
                     />
                   </div>
