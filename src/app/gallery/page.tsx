@@ -219,47 +219,63 @@ export default function GalleryPage() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-4xl max-h-[90vh] md:max-h-[75vh] bg-white rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row border border-primary/10"
+              className={`relative w-full bg-white rounded-3xl overflow-hidden shadow-2xl flex border border-primary/10 ${
+                activeItem.description 
+                  ? 'max-w-4xl flex-col md:flex-row max-h-[90vh] md:max-h-[75vh]' 
+                  : 'max-w-3xl flex-col max-h-[90vh] md:max-h-[80vh]'
+              }`}
             >
-              {/* Left Column: Image Showcase (58%) */}
-              <div className="w-full md:w-[58%] bg-white flex items-center justify-center p-6 relative min-h-[260px] md:min-h-[400px]">
+              {/* Left Column: Image Showcase */}
+              <div className={`bg-white flex items-center justify-center p-6 relative ${
+                activeItem.description 
+                  ? 'w-full md:w-[58%] min-h-[260px] md:min-h-[400px]' 
+                  : 'w-full min-h-[300px] md:min-h-[450px]'
+              }`}>
                 <img
                   src={activeItem.imageUrl}
                   alt={activeItem.title}
-                  className="max-w-full max-h-[35vh] md:max-h-[65vh] object-contain rounded-xl"
+                  className={`max-w-full object-contain rounded-xl ${
+                    activeItem.description ? 'max-h-[35vh] md:max-h-[65vh]' : 'max-h-[75vh] md:max-h-[70vh]'
+                  }`}
                 />
+                
+                {/* Close Button on image showcase (only when description is absent) */}
+                {!activeItem.description && (
+                  <button
+                    onClick={() => setActiveItem(null)}
+                    className="absolute top-5 right-5 text-text-secondary hover:text-primary transition-colors cursor-pointer p-1.5 rounded-full hover:bg-black/5"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+                )}
               </div>
 
-              {/* Right Column: Title & Description Content (42%) */}
-              <div className="w-full md:w-[42%] p-6 md:p-8 flex flex-col bg-white text-foreground border-t md:border-t-0 md:border-l border-primary/10">
-                <div className="space-y-4 overflow-y-auto max-h-[40vh] md:max-h-full pr-1">
-                  <div className="flex items-center justify-between border-b border-primary/10 pb-3">
-                    <span className="text-[10px] uppercase tracking-wider text-primary font-bold">
-                      {activeItem.type}
-                    </span>
-                    <button
-                      onClick={() => setActiveItem(null)}
-                      className="text-text-secondary hover:text-primary transition-colors cursor-pointer p-1 rounded-full hover:bg-black/5"
-                    >
-                      <X className="w-5 h-5" />
-                    </button>
-                  </div>
-                  
-                  <h3 className="font-serif text-lg sm:text-xl font-bold text-foreground leading-tight">
-                    {activeItem.title}
-                  </h3>
+              {/* Right Column: Title & Description Content (Only shown if description is present) */}
+              {activeItem.description && (
+                <div className="w-full md:w-[42%] p-6 md:p-8 flex flex-col bg-white text-foreground border-t md:border-t-0 md:border-l border-primary/10">
+                  <div className="space-y-4 overflow-y-auto max-h-[40vh] md:max-h-full pr-1">
+                    <div className="flex items-center justify-between border-b border-primary/10 pb-3">
+                      <span className="text-[10px] uppercase tracking-wider text-primary font-bold">
+                        {activeItem.type}
+                      </span>
+                      <button
+                        onClick={() => setActiveItem(null)}
+                        className="text-text-secondary hover:text-primary transition-colors cursor-pointer p-1 rounded-full hover:bg-black/5"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
+                    
+                    <h3 className="font-serif text-lg sm:text-xl font-bold text-foreground leading-tight">
+                      {activeItem.title}
+                    </h3>
 
-                  {activeItem.description ? (
                     <p className="text-xs sm:text-sm text-text-secondary leading-relaxed font-light text-justify pt-1 whitespace-pre-wrap">
                       {activeItem.description}
                     </p>
-                  ) : (
-                    <p className="text-xs text-text-light italic leading-relaxed pt-1">
-                      No description provided for this gallery item.
-                    </p>
-                  )}
+                  </div>
                 </div>
-              </div>
+              )}
             </motion.div>
           </motion.div>
         )}
