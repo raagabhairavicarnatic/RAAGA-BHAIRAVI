@@ -29,7 +29,7 @@ const fadeInUp = {
 export default function GalleryPage() {
   const [items, setItems] = useState<GalleryItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const [activeItem, setActiveItem] = useState<GalleryItem | null>(null);
   const [activeFilter, setActiveFilter] = useState<'all' | 'image' | 'youtube'>('all');
 
   const filteredItems = activeFilter === 'all'
@@ -53,6 +53,7 @@ export default function GalleryPage() {
           id: doc.id,
           type: data.type,
           title: data.title,
+          description: data.description || '',
           imageUrl: data.imageUrl,
           youtubeUrl: data.youtubeUrl,
           createdAt: data.createdAt,
@@ -146,6 +147,13 @@ export default function GalleryPage() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true, margin: '-50px' }}
                     transition={{ duration: 0.5 }}
+                    onClick={() => {
+                      if (item.type === 'image') {
+                        setActiveItem(item);
+                      } else if (item.youtubeUrl) {
+                        window.open(item.youtubeUrl, '_blank', 'noopener,noreferrer');
+                      }
+                    }}
                     className="break-inside-avoid glass-panel p-3 rounded-2xl flex flex-col space-y-3 shadow-sm hover:shadow-md transition-shadow relative group cursor-pointer"
                   >
                     {/* Media frame */}
@@ -170,40 +178,25 @@ export default function GalleryPage() {
                       {/* Hover visual details */}
                       <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-4">
                         {item.type === 'image' ? (
-                          <button
-                            onClick={() => setLightboxImage(item.imageUrl)}
-                            className="w-12 h-12 rounded-full bg-white/90 hover:bg-white text-primary-deep flex items-center justify-center shadow-lg transition-colors"
-                          >
+                          <div className="w-12 h-12 rounded-full bg-white/90 text-primary-deep flex items-center justify-center shadow-lg">
                             <Eye className="w-5 h-5" />
-                          </button>
+                          </div>
                         ) : (
-                          <a
-                            href={item.youtubeUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center shadow-lg transition-colors hover:bg-primary-hover"
-                          >
+                          <div className="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center shadow-lg">
                             <Play className="w-5 h-5 fill-white ml-0.5" />
-                          </a>
+                          </div>
                         )}
                       </div>
                     </div>
 
                     {/* Info Text */}
-                    <div className="px-2 pb-1 space-y-1">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-xs font-serif font-bold text-foreground truncate flex-1">
-                          {item.title}
-                        </span>
-                        <span className="text-[9px] uppercase tracking-wider text-text-light flex-shrink-0">
-                          {item.type}
-                        </span>
-                      </div>
-                      {item.description && (
-                        <p className="text-[10px] text-text-secondary leading-normal font-light line-clamp-2 text-justify">
-                          {item.description}
-                        </p>
-                      )}
+                    <div className="px-2 pb-1 flex items-center justify-between">
+                      <span className="text-xs font-serif font-bold text-foreground truncate max-w-[80%]">
+                        {item.title}
+                      </span>
+                      <span className="text-[9px] uppercase tracking-wider text-text-light flex-shrink-0">
+                        {item.type}
+                      </span>
                     </div>
                   </motion.div>
                 ))}
@@ -213,37 +206,80 @@ export default function GalleryPage() {
         )}
       </div>
 
-      {/* Lightbox Modal for Images */}
+      {/* Lightbox Modal for Images with side-by-side details */}
       <AnimatePresence>
-        {lightboxImage && (
+        {activeItem && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setLightboxImage(null)}
-            className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 cursor-zoom-out"
+            onClick={() => setActiveItem(null)}
+            className="fixed inset-0 z-50 bg-white/95 backdrop-blur-md flex items-center justify-center p-4 md:p-6"
           >
-            {/* Close Button */}
+            {/* Top Right Close Button on backdrop */}
             <button
-              onClick={() => setLightboxImage(null)}
-              className="absolute top-6 right-6 text-white/75 hover:text-white transition-colors"
+              onClick={() => setActiveItem(null)}
+              className="absolute top-6 right-6 text-text-secondary hover:text-primary transition-colors cursor-pointer z-50 p-2 rounded-full hover:bg-black/5"
             >
               <X className="w-8 h-8" />
             </button>
 
-            {/* Image display */}
+            {/* Modal Container */}
             <motion.div
-              initial={{ scale: 0.95 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.95 }}
-              className="relative max-w-4xl max-h-[80vh] aspect-[4/3] sm:aspect-auto"
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-4xl max-h-[90vh] md:max-h-[75vh] bg-white rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row border border-primary/10"
             >
-              <img
-                src={lightboxImage}
-                alt="Enlarged view"
-                className="max-w-full max-h-[80vh] object-contain rounded-lg shadow-2xl"
-              />
+              {/* Left Column: Image Showcase */}
+              <div className="w-full md:w-2/3 bg-white flex items-center justify-center p-6 relative min-h-[260px] md:min-h-[400px]">
+                <img
+                  src={activeItem.imageUrl}
+                  alt={activeItem.title}
+                  className="max-w-full max-h-[35vh] md:max-h-[65vh] object-contain rounded-xl"
+                />
+              </div>
+
+              {/* Right Column: Title & Description Content (White Background) */}
+              <div className="w-full md:w-1/3 p-6 md:p-8 flex flex-col justify-between bg-white text-foreground border-t md:border-t-0 md:border-l border-primary/10">
+                <div className="space-y-4 overflow-y-auto max-h-[40vh] md:max-h-full pr-1">
+                  <div className="flex items-center justify-between border-b border-primary/10 pb-3">
+                    <span className="text-[10px] uppercase tracking-wider text-primary font-bold">
+                      {activeItem.type}
+                    </span>
+                    <button
+                      onClick={() => setActiveItem(null)}
+                      className="text-text-secondary hover:text-primary transition-colors cursor-pointer"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+                  
+                  <h3 className="font-serif text-lg sm:text-xl font-bold text-foreground leading-tight">
+                    {activeItem.title}
+                  </h3>
+
+                  {activeItem.description ? (
+                    <p className="text-xs sm:text-sm text-text-secondary leading-relaxed font-light text-justify pt-1 whitespace-pre-wrap">
+                      {activeItem.description}
+                    </p>
+                  ) : (
+                    <p className="text-xs text-text-light italic leading-relaxed pt-1">
+                      No description provided for this gallery item.
+                    </p>
+                  )}
+                </div>
+
+                <div className="pt-4 border-t border-primary/10 flex justify-end mt-4">
+                  <button
+                    onClick={() => setActiveItem(null)}
+                    className="px-5 py-2.5 rounded-xl border border-primary/20 hover:border-primary text-xs font-semibold text-text-secondary hover:text-primary transition-colors cursor-pointer"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
             </motion.div>
           </motion.div>
         )}
