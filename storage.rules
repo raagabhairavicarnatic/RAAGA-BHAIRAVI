@@ -4,9 +4,8 @@ service firebase.storage {
     function isAdmin() {
       return request.auth != null && 
         (request.auth.token.email == "arvind152402@gmail.com" || 
-         request.auth.token.email == "srivinish1976@gmail.com" || 
-         request.auth.token.email == "admin2@example.com" || 
-         request.auth.token.email == "admin3@example.com");
+         request.auth.token.email == "ranjithkumar.m.cse@gmail.com" || 
+         request.auth.token.email == "srivinish1976@gmail.com");
     }
 
     // Only admin can upload/delete images or media. Public can read.
